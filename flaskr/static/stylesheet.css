@@ -1,0 +1,17 @@
+body{
+    align-content: center;
+    background-color: white;
+}
+.card{
+    border-radius: 10px;
+    border-width: 2px;
+    margin: 2vmax;
+}
+
+.padded{
+    padding: 10px;
+}
+
+.confirm-button{
+    width: 30vmax;
+}
