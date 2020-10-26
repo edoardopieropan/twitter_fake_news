@@ -18,9 +18,9 @@
       {% for tweet in range(0, len) %}
         <div class="card border-primary mx-auto" style="min-width:30vw; width:40vmax; height:auto">
           <div class="card-body">
-            <h5 class="card-title">SpaceX</h5>
-            <p class="card-text font-italic">{{list_tweets[tweet]}}
-            </p><small class="text-muted float-right">3 mins ago</small>
+            <h5 class="card-title">{{list_sources[tweet]}}</h5>
+            <p class="card-text font-italic">{{list_tweets[tweet]}}</p>
+            <small class="text-muted float-right">{{list_times[tweet]}}</small>
           </div>
           <div class="card-footer">
             
@@ -30,7 +30,6 @@
               <div class="col-lg-3 mb-1" style="min-width:10vh;">
                 <a href="#" class="btn btn-primary" style="width: 100%;">Fake</a>
               </div>
-              
               <div class="col-lg-3 mb-1" style="min-width:10vh;">
                 <a href="#" class="btn btn-primary" style="width: 100%;">Maybe</a>
               </div>
