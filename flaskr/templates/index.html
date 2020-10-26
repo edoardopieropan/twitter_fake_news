@@ -26,17 +26,17 @@
             
             <!-- RATE BUTTONS -->
             <h6>Rate this tweet:</h6>
-            <div class="row d-flex justify-content-center">
-              <div class="col-lg-3 mb-1" style="min-width:10vh;">
-                <a href="#" class="btn btn-primary" style="width: 100%;">Fake</a>
+            <form id="form{{tweet}}" class="row d-flex justify-content-center btn-group-toggle" data-toggle="buttons">
+              <div class="col-lg-3 m-1 btn btn-primary" style="min-width:10vh;">
+                <input type="radio" name="options"  style="width: 100%;" value="Fake" autocomplete="off" required>Fake
               </div>
-              <div class="col-lg-3 mb-1" style="min-width:10vh;">
-                <a href="#" class="btn btn-primary" style="width: 100%;">Maybe</a>
+              <div class="col-lg-3 m-1 btn btn-primary" style="min-width:10vh;">
+                <input type="radio" name="options" style="width: 100%;" value="Maybe" autocomplete="off">Maybe
               </div>
-              <div class="col-lg-3 mb-1" style="min-width:10vh;">
-                <a href="#" class="btn btn-primary" style="width: 100%;">Truth</a>
+              <div class="col-lg-3 m-1 btn btn-primary" style="min-width:10vh;">
+                <input type="radio" name="options"  style="width: 100%;" value="Truth" autocomplete="off">Truth
               </div>
-            </div>  
+            </form>
             <!-- END RATE BUTTONS -->
 
           </div>
@@ -48,11 +48,29 @@
 
     <!-- CONFIRM BUTTON -->
     <div class="row justify-content-center padded" style="width: 100%; margin: 0;">
-      <a href="#" class="btn btn-success confirm-button">CONFIRM</a>
+      <input class="btn btn-success confirm-button" type="button" value="CONFIRM" onclick="myFunction()">
     </div>
   
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+ 
+    <script> 
+    
+        function myFunction() {
+            var formData = [];
+            $('input:radio').each(function () {
+
+              var $this = $(this),
+                  value = $this.attr('value')
+
+              if ($(this).prop('checked')) {
+                  formData.push(value);
+              }
+              
+            });
+            document.write(formData)
+        }
+    </script> 
   </body>
 </html>
