@@ -24,7 +24,15 @@ list_tweets = get_tweets.get("news", 8)
 ```
 If you want retweets to be received you need to delete the text `"-filter:retweets"` in *get_tweets.py*. Note that the text of retweeted messages will be truncaded by the API.
 
-To test this application install the requirements and run
+For language analysis we use [spaCy](https://spacy.io/usage) ([Github](https://github.com/explosion/spaCy)), a free open-source library for advanced Natural Language Processing (NLP) in Python. It supports also the Italian language. Beginners can have a look at https://spacy.io/usage/spacy-101.
+To install spaCy on your machine you can run those commands on your terminal:
+```
+pip3 install spacy
+python3 -m spacy download it_core_news_sm
+```
+in this case we are downloading the italian model.
+
+Finally to test this application install the requirements and run
 ```
 python3 main.py
 ```
