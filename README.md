@@ -18,7 +18,7 @@ Copy your keys and tokens in the *twitter_keys.txt* file in the order:
 1. access_token
 1. access_token_secret
 
-You can now set the hasthtag and how many tweet to receive in the *main.py* file, in this case we are looking for #news and 8 tweets:
+You can now set the hasthtag and how many tweet to receive in the *app.py* file, in this case we are looking for #news and 8 tweets:
 
 ```python
 list_tweets = get_tweets.get("news", 8)
@@ -33,6 +33,8 @@ pip install -U spacy
 python3 -m spacy download it_core_news_md
 ```
 in this case we are downloading the italian model <sup>1</sup>.
+
+The analysis will be done by *nlp.py*.
 
 <sub><sup>1</sup> the *_md* model supports multi-task CNN trained on UD Italian ISDT and WikiNER. Assigns context-specific token vectors, POS tags, dependency parses and named entities. The shorter model *_sm* was not enough for some advanced analysis.</sub>
 
