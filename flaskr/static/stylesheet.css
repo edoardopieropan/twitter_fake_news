@@ -1,6 +1,7 @@
 body{
     align-content: center;
     background-color: white;
+    max-width: 100%;
 }
 .card{
     border-radius: 10px;

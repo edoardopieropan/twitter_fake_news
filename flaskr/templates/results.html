@@ -15,30 +15,21 @@
     <!-- CARD SECTION-->
     <section class="container-fluid d-flex justify-content-center">
       <div class="row d-flex justify-content-center" style="padding-right:5vw; padding-left:5vw; width: 100%;"> 
-      {% for tweet in range(0, len) %}
+        {% for tweet in range(0, len) %}
+        {% if list_results[tweet] > 70 %}
+        <div class="card border-danger mx-auto" style="min-width:30vw; width:40vmax; height:auto">
+        {% elif list_results[tweet] > 50 %}
+        <div class="card border-warning mx-auto b-3" style="min-width:30vw; width:40vmax; height:auto">
+        {% else %}
         <div class="card border-primary mx-auto" style="min-width:30vw; width:40vmax; height:auto">
+        {% endif %}
           <div class="card-body">
             <h5 class="card-title">{{list_sources[tweet]}}</h5>
             <p class="card-text font-italic">{{list_tweets[tweet]}}</p>
             <small class="text-muted float-right">{{list_times[tweet]}}</small>
           </div>
           <div class="card-footer">
-            
-            <!-- RATE BUTTONS -->
-            <h6>Rate this tweet:</h6>
-            <form id="form{{tweet}}" class="row d-flex justify-content-center btn-group-toggle" data-toggle="buttons">
-              <div class="col-lg-3 m-1 btn btn-primary" style="min-width:10vh;">
-                <input type="radio" name="options"  style="width: 100%;" value="Fake" autocomplete="off" required>Fake
-              </div>
-              <div class="col-lg-3 m-1 btn btn-primary" style="min-width:10vh;">
-                <input type="radio" name="options" style="width: 100%;" value="Maybe" autocomplete="off">Maybe
-              </div>
-              <div class="col-lg-3 m-1 btn btn-primary" style="min-width:10vh;">
-                <input type="radio" name="options"  style="width: 100%;" value="Truth" autocomplete="off">Truth
-              </div>
-            </form>
-            <!-- END RATE BUTTONS -->
-
+            <h2>Fake {{list_results[tweet]}}%</h2>
           </div>
         </div>
       {% endfor %}
@@ -48,7 +39,7 @@
 
     <!-- CONFIRM BUTTON -->
     <div class="row justify-content-center padded" style=" margin: 0;">
-      <input class="btn btn-success confirm-button" type="button" value="CONFIRM" onclick="myFunction()">
+      <input class="btn btn-success confirm-button" type="button" value="BACK" onclick="myFunction()">
     </div>
   
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -58,19 +49,7 @@
     <script> 
     
         function myFunction() {
-            var formData = [];
-            $('input:radio').each(function () {
-
-              var $this = $(this),
-                  value = $this.attr('value')
-
-              if ($(this).prop('checked')) {
-                  formData.push(value);
-              }
-              
-            });
-            document.write(formData)
-            window.location.href = 'results';
+          window.location.href = '/';
         }
     </script> 
   </body>
