@@ -29,10 +29,12 @@ If you want retweets to be received you need to delete the text `"-filter:retwee
 For language analysis we use [spaCy](https://spacy.io/usage) ([Github](https://github.com/explosion/spaCy)), a free open-source library for advanced Natural Language Processing (NLP) in Python. It supports also the Italian language. Beginners can have a look at https://spacy.io/usage/spacy-101.
 To install spaCy on your machine you can run those commands on your terminal:
 ```
-pip3 install spacy
-python3 -m spacy download it_core_news_sm
+pip install -U spacy
+python3 -m spacy download it_core_news_md
 ```
-in this case we are downloading the italian model.
+in this case we are downloading the italian model <sup>1</sup>.
+
+<sub><sup>1</sup> the *_md* model supports multi-task CNN trained on UD Italian ISDT and WikiNER. Assigns context-specific token vectors, POS tags, dependency parses and named entities. The shorter model *_sm* was not enough for some advanced analysis.</sub>
 
 ### Run the app
 Finally to test this application install the requirements and run
