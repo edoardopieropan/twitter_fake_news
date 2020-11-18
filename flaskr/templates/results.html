@@ -8,15 +8,16 @@
   </head>
   <body>
     <!-- NAVBAR -->
-    <nav class="navbar navbar-dark bg-primary justify-content-center">
-      <h1 style="font-size: 4vmax; color: white;">Twitter Fake News<img class="padded" src="../static/images/twitter_logo.png" style="max-height:10vh"></h1>
+    <nav class="navbar navbar-dark bg-primary">
+      <h1 style="font-size: 2.5vmax; color: white;">Twitter Fake News
+      <p style="font-size: 2vmax; color: white;">RESULTS</p></h1>
     </nav>
 
     <!-- CARD SECTION-->
     <section class="container-fluid d-flex justify-content-center">
       <div class="row d-flex justify-content-center" style="padding-right:5vw; padding-left:5vw; width: 100%;"> 
         {% for tweet in range(0, len) %}
-        {% if list_results[tweet] > 70 %}
+        {% if list_results[tweet] > 65 %}
         <div class="card border-danger mx-auto" style="min-width:30vw; width:40vmax; height:auto">
         {% elif list_results[tweet] > 50 %}
         <div class="card border-warning mx-auto b-3" style="min-width:30vw; width:40vmax; height:auto">
