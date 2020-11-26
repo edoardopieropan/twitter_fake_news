@@ -2,14 +2,16 @@ from flask import Flask, render_template
 import get_tweets
 import nlp
 import websitescraping
-  
+
+NUM_PAGES = 2
+
 # declaring app name 
 app = Flask(__name__) 
   
 # list of tweets
 list_sources, list_tweets_text, list_times = [],[],[]
 
-list_tweets = get_tweets.get("bufala", 8)
+list_tweets = get_tweets.get("news", 8)
 for tweet in list_tweets:
     list_sources.append(tweet[0])
     list_tweets_text.append(tweet[1])
@@ -25,7 +27,7 @@ def homepage():
 
 @app.route('/results')
 def results():
-    bufale = websitescraping.get_bufale()
+    bufale = websitescraping.get_bufale(NUM_PAGES)
     results = []
     for t in list_tweets_text:
         results_tmp = []
