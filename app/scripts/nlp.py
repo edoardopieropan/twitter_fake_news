@@ -42,6 +42,7 @@ def preprocess(doc1, doc2):
     doc2 = ' '.join(map(str, doc2)) 
     return doc1, doc2
 
+
 def get_similarity(doc1, doc2):
 
     doc1 = doc1.__str__()

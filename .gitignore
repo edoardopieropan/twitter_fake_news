@@ -1,3 +1,7 @@
 /.DS_Store
 __pycache__/
 twitter_keys.txt
+twitter_keys.py
+config.py
+venv
+

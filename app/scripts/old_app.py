@@ -33,7 +33,7 @@ def results():
             results_tmp.append(float(round(nlp.get_similarity(t, b)*100, 2)))
         results.append(max(results_tmp))
 
-    return render_template("results.html", len = len(list_tweets), list_tweets = list_tweets_text, list_sources = list_sources , list_times = list_times, list_results = results) 
+    return render_template("results.html", len = len(list_tweets), list_tweets = list_tweets_text, list_sources = list_sources, list_times = list_times, list_results = results)
 
 if __name__ == "__main__":
 
