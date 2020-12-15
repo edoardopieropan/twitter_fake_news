@@ -1,10 +1,10 @@
 from lxml import html
 import requests
 
-def get_bufale():
+def get_bufale(number_of_pages):
     articles, articles_tmp = [], []
     #BUFALE.NET
-    for pageNumber in range(1,2):
+    for pageNumber in range(1,number_of_pages):
         page = requests.get('https://www.bufale.net/bufala/page/{}/'.format(pageNumber))
         tree = html.fromstring(page.content)
 
@@ -13,7 +13,7 @@ def get_bufale():
         #print(articles)
 
     #BUTAC
-    for pageNumber in range(1,2):
+    for pageNumber in range(1,number_of_pages):
         page = requests.get('https://m.butac.it/category/bufala/page/{}/'.format(pageNumber))
         tree = html.fromstring(page.content)
 
