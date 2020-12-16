@@ -1,12 +1,40 @@
-body{
+
+html,body{
     align-content: center;
-    background-color: white;
+    background-color: rgb(77, 133, 255);
+    color: white;
     max-width: 100%;
+    overflow-x: hidden;
+}
+.spinner{
+  z-index: 3; 
+  width: 3rem;
+  height: 3rem; 
+  position: absolute;
+  top: 45%
+}
+div#overlay{
+  background-color: rgb(77, 133, 255);
+  position: fixed; /* Sit on top of the page content */
+  display: block; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0; 
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
+.logo{
+    max-height: 2vmax;
 }
 .card{
     border-radius: 10px;
-    border-width: 2px;
+    border-width: 3px;
     margin: 2vmax;
+    color: black;
 }
 
 .padded{
@@ -16,3 +44,37 @@ body{
 .confirm-button{
     width: 30vmax;
 }
+
+blockquote.twitter-tweet {
+    display: inline-block;
+    font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 16px;
+    border-color: #eee #ddd #bbb;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    margin: 10px 5px;
+    padding: 0 16px 16px 16px;
+    max-width: 80vw
+  }
+  
+  blockquote.twitter-tweet p {
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 20px;
+  }
+  
+  blockquote.twitter-tweet a {
+    color: inherit;
+    font-weight: normal;
+    text-decoration: none;
+    outline: 0 none;
+  }
+  
+  blockquote.twitter-tweet a:hover,
+  blockquote.twitter-tweet a:focus {
+    text-decoration: underline;
+  }

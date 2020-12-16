@@ -8,30 +8,37 @@
   </head>
   <body>
     <!-- NAVBAR -->
-    <nav class="navbar d-flex justify-content-between">
-      <img src="static/images/twitter_logo_round.png" class="logo" alt="Logo">
-      <h1 style="font-size: 2vmax; text-align: right;">FAKE NEWS ANALYZER</h1>
-  </nav>
-  <div class="d-flex justify-content-center"><h2>Results</h2></div>
+    <nav class="navbar navbar-dark bg-primary">
+      <h1 style="font-size: 2vmax; color: white;">Twitter Fake News</h1>
+    </nav>
 
     <!-- CARD SECTION-->
     <section class="container-fluid d-flex justify-content-center">
       <div class="row d-flex justify-content-center" style="padding-right:5vw; padding-left:5vw; width: 100%;"> 
-        {% for tweet in range(0, len) %}
-        {% if list_results[tweet] > 65 %}
-        <div class="card text-dark border-danger mx-auto  b-3" style="min-width:30vw; width:40vmax; height:auto">
-        {% elif list_results[tweet] > 50 %}
-        <div class="card text-dark border-warning mx-auto b-3" style="min-width:30vw; width:40vmax; height:auto">
-        {% else %}
-        <div class="card text-dark border-primary mx-auto  b-3" style="min-width:30vw; width:40vmax; height:auto">
-        {% endif %}
+      {% for tweet in range(0, len) %}
+        <div class="card border-primary mx-auto" style="min-width:30vw; width:40vmax; height:auto">
           <div class="card-body">
             <h5 class="card-title">{{list_sources[tweet]}}</h5>
-            <p class=" font-italic">{{list_tweets[tweet]}}</p>
+            <p class="card-text font-italic">{{list_tweets[tweet]}}</p>
             <small class="text-muted float-right">{{list_times[tweet]}}</small>
           </div>
           <div class="card-footer">
-            <h2>Fake {{list_results[tweet]}}%</h2>
+            
+            <!-- RATE BUTTONS -->
+            <h6>Rate this tweet:</h6>
+            <form id="form{{tweet}}" class="row d-flex justify-content-center btn-group-toggle" data-toggle="buttons">
+              <div class="col-lg-3 m-1 btn btn-primary" style="min-width:10vh;">
+                <input type="radio" name="options"  style="width: 100%;" value="Fake" autocomplete="off" required>Fake
+              </div>
+              <div class="col-lg-3 m-1 btn btn-primary" style="min-width:10vh;">
+                <input type="radio" name="options" style="width: 100%;" value="Maybe" autocomplete="off">Maybe
+              </div>
+              <div class="col-lg-3 m-1 btn btn-primary" style="min-width:10vh;">
+                <input type="radio" name="options"  style="width: 100%;" value="Truth" autocomplete="off">Truth
+              </div>
+            </form>
+            <!-- END RATE BUTTONS -->
+
           </div>
         </div>
       {% endfor %}
@@ -41,7 +48,7 @@
 
     <!-- CONFIRM BUTTON -->
     <div class="row justify-content-center padded" style=" margin: 0;">
-      <input class="btn btn-success confirm-button" type="button" value="BACK" onclick="myFunction()">
+      <input class="btn btn-success confirm-button" type="button" value="CONFIRM" onclick="myFunction()">
     </div>
   
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -51,7 +58,19 @@
     <script> 
     
         function myFunction() {
-          window.location.href = '/';
+            var formData = [];
+            $('input:radio').each(function () {
+
+              var $this = $(this),
+                  value = $this.attr('value')
+
+              if ($(this).prop('checked')) {
+                  formData.push(value);
+              }
+              
+            });
+            document.write(formData)
+            window.location.href = 'results';
         }
     </script> 
   </body>

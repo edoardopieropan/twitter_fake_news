@@ -19,4 +19,4 @@ def get(hashtag, n):
                 lang="it",
                 since=date_since).items(n)
 
-    return [[tweet.user.screen_name, tweet.full_text, tweet.created_at] for tweet in tweets]
+    return [[tweet.user.screen_name, tweet.full_text, tweet.created_at, tweet.id] for tweet in tweets]
