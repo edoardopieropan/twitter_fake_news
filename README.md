@@ -12,7 +12,7 @@ This test application let you see some tweets received using [*Tweepy*](http://d
 Twitter needs a developer authentication for use their APIs, so before start request your keys at https://developer.twitter.com/ it will take about 14 days according to Twitter. Once ready you will access on the project page and have the *Consumer Keys* and *Authentication Tokens*.
 
 Download this repository.
-Copy your keys and tokens in the *twitter_keys.txt* file in the order:
+Copy your keys and tokens in the *config.py* file. You will need:
 1. consumer_key
 1. consumer_secret
 1. access_token
@@ -39,9 +39,14 @@ The analysis will be done by *nlp.py*.
 <sub><sup>1</sup> the *_md* model supports multi-task CNN trained on UD Italian ISDT and WikiNER. Assigns context-specific token vectors, POS tags, dependency parses and named entities. The shorter model *_sm* was not enough for some advanced analysis.</sub>
 
 ### Run the app
-Finally to test this application install the requirements and run
+Finally to test this application install the requirements 
+then export FLASK_APP with
 ```
-python3 main.py
+export FLASK_APP=twitter_fake_news.py
+```
+then launch flask
+```
+flask run
 ```
 then open `localhost:5000` on your browser.
 
