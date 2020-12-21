@@ -9,10 +9,14 @@ from app.scripts import nlp
 import datetime
 import json
 
+NUM_PAGES = 2
+NUM_TWEETS = 8
+HASHTAG = "bufala" 
+
 # list of tweets
 list_sources, list_tweets_text, list_times, list_ids = [], [], [], []
 
-list_tweets = get_tweets.get("bufala", 8)
+list_tweets = get_tweets.get(HASHTAG, NUM_TWEETS)
 for tweet in list_tweets:
     list_sources.append(tweet[0])
     list_tweets_text.append(tweet[1])
@@ -40,7 +44,7 @@ def results():
     if request.method == 'POST':
         user_choices=request.get_json()
 
-    bufale = websitescraping.get_bufale(2)
+    bufale = websitescraping.get_bufale(NUM_PAGES)
     results = []
     for t in list_tweets_text:
         results_tmp = []
