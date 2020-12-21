@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/stylesheet.css">
+    <title>Fake news Analyzer</title>
+    
+  </head>
+  <body>
+     <!-- LOADING -->
+    <div id="overlay">
+      <div class="d-flex justify-content-center" style="width: 100%; height: 100%;">  <!-- DISAPPEARS AFTER 5 SEC -->
+        <div class="spinner-grow spinner" role="status"> 
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+    <!-- END LOADING -->
+
+    <!-- NAVBAR -->
+    <nav class="navbar d-flex justify-content-between">
+        <img src="../static/images/twitter_logo_round.png" class="logo" alt="Logo">
+        <h1 style="font-size: 1.5vmax; text-align: right;">FAKE NEWS ANALYZER</h1>
+    </nav>
+    <div class="d-flex justify-content-center"><h2>Rate these tweets</h2></div>
+    
+    <!-- CARD SECTION-->
+    {% for tweet in range(0, len) %}
+    <div class="row d-flex justify-content-center"> 
+        <blockquote class="twitter-tweet" data-cards="hidden"><p lang="en" dir="ltr">{{list_tweets[tweet]}}</p>{{list_sources[tweet]}}
+            <a href="https://twitter.com/{{list_sources[tweet]}}/status/{{list_ids[tweet]}}">{{list_times[tweet]}}</a>
+        </blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    </div>
+    <div class="row d-flex justify-content-center" style="padding-right:5vw; padding-left:5vw; padding-bottom:2vh;">
+        <!-- RATE BUTTONS -->
+        <form id="form{{tweet}}" class="row d-flex justify-content-center btn-group-toggle" data-toggle="buttons">
+          <div class="col-lg-3 m-1 btn btn-outline-light" style="min-width:10vh;">
+            <input type="radio" name="options"  style="width: 100%;" value="Fake" autocomplete="off" id="{{list_ids[tweet]}}" required>Fake
+          </div>
+          <div class="col-lg-3 m-1 btn btn-outline-light" style="min-width:10vh;">
+            <input type="radio" name="options" style="width: 100%;" value="Maybe" autocomplete="off" id="{{list_ids[tweet]}}">Maybe
+          </div>
+          <div class="col-lg-3 m-1 btn btn-outline-light" style="min-width:10vh;">
+            <input type="radio" name="options"  style="width: 100%;" value="Truth" autocomplete="off" id="{{list_ids[tweet]}}">Truth
+          </div>
+        </form>
+        <!-- END RATE BUTTONS -->
+    </div>
+    {% endfor %}
+    <!-- END CARD SECTION -->
+
+    <!-- CONFIRM BUTTON -->
+    <div class="row justify-content-center padded" style=" margin: 0;">
+      <input class="btn btn-success confirm-button" type="button" value="CONFIRM" onclick="myFunction()">
+    </div>
+  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <script> 
+    
+        function myFunction() {
+            var formData = {};
+            let count = 0;
+            var len = {{ len }}
+            $('input:radio').each(function () {
+              
+              //id does not identify a tweet
+              var $this = $(this),
+                  value = $this.attr('value')
+                  id = String($this.attr('id'))
+              if ($(this).prop('checked')) {
+                  formData[id]=value
+                  count++;
+              }
+            });
+            console.log(formData);
+            console.log(len);
+            console.log(count);
+            if((count)==len){
+              fadeLoading()
+              $.ajax({
+              type: "POST",
+              url: "/results",
+              traditional: "true",
+              data: JSON.stringify({formData}),
+              contentType: "application/json",
+              success: function (data) {
+                document.write(data);
+              },
+              error: function (xhr, error) {
+                console.debug(xhr); 
+                console.debug(error);
+              } 
+              });
+            } else {
+              window.alert("Missinig choice");
+            }
+        }
+        
+        function fadeLoading(){
+          $('#overlay').fadeIn();
+        }
+    </script> 
+    <script>
+      $(window).on('load', function () {
+        setTimeout(function(){
+          $('#overlay').fadeOut();
+        }, 5000);
+    });
+    </script>
+  </body>
+</html>

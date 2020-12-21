@@ -1,7 +1,7 @@
 
 html,body{
     align-content: center;
-    background-color: rgb(77, 133, 255);
+    background-color: #1DA1F2 ;
     color: white;
     max-width: 100%;
     overflow-x: hidden;
@@ -14,7 +14,7 @@ html,body{
   top: 45%
 }
 div#overlay{
-  background-color: rgb(77, 133, 255);
+  background-color: #1DA1F2;
   position: fixed; /* Sit on top of the page content */
   display: block; /* Hidden by default */
   width: 100%; /* Full width (cover the whole page) */
@@ -77,4 +77,10 @@ blockquote.twitter-tweet {
   blockquote.twitter-tweet a:hover,
   blockquote.twitter-tweet a:focus {
     text-decoration: underline;
+  }
+
+  #welcomePageSection{
+      width: 80vw;
+      background-color: #1DA1F2;
+      min-height: 90vh;
   }

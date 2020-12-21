@@ -24,9 +24,14 @@ for tweet in list_tweets:
 @app.route('/')
 @app.route('/index')
 def homepage():
-    # returning index.html and list
+    # returning index.html
+    return render_template("index.html")
+
+@app.route('/tweets')
+def tweetPage():
+    # returning list_tweets.html and list
     # and length of list to html page
-    return render_template("index.html", len=len(list_tweets), list_tweets=list_tweets_text, list_sources=list_sources,
+    return render_template("list_tweets.html", len=len(list_tweets), list_tweets=list_tweets_text, list_sources=list_sources,
                            list_times=list_times, list_ids=list_ids)
 
 @app.route('/results', methods=['POST'])
