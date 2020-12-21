@@ -18,11 +18,8 @@ Copy your keys and tokens in the *config.py* file. You will need:
 1. access_token
 1. access_token_secret
 
-You can now set the hasthtag and how many tweet to receive in the *app.py* file, in this case we are looking for #news and 8 tweets:
+You can set the hasthtag and how many tweet to receive in the *routes.py* file.
 
-```python
-list_tweets = get_tweets.get("news", 8)
-```
 If you want retweets to be received you need to delete the text `"-filter:retweets"` in *get_tweets.py*. Note that the text of retweeted messages will be truncaded by the API.
 
 ### Natural Language Processing (NLP)
