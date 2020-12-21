@@ -84,3 +84,9 @@ blockquote.twitter-tweet {
       background-color: #1DA1F2;
       min-height: 90vh;
   }
+
+  .carousel-indicators li {
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+  }
