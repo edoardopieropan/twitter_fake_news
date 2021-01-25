@@ -3,7 +3,7 @@ import spacy
 import string
 from spacy.lang.it import STOP_WORDS
 
-nlp = spacy.load('it_core_news_md')
+nlp = spacy.load('it_core_news_lg')
 
 def deEmojify(text):
     regrex_pattern = re.compile(pattern = "["

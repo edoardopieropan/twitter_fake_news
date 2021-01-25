@@ -2,7 +2,6 @@
 html,body{
     align-content: center;
     background-color: #1DA1F2 ;
-    color: white;
     max-width: 100%;
     overflow-x: hidden;
 }
@@ -30,12 +29,13 @@ div#overlay{
 .logo{
     max-height: 2vmax;
 }
-.card{
-    border-radius: 10px;
-    border-width: 3px;
-    margin: 2vmax;
-    color: black;
-}
+
+/*.card{*/
+/*    border-radius: 10px;*/
+/*    border-width: 3px;*/
+/*    margin: 2vmax;*/
+/*    color: black;*/
+/*}*/
 
 .padded{
     padding: 10px;

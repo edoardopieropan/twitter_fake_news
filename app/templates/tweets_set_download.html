@@ -1,0 +1,80 @@
+{% extends 'bootstrap/base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block head %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="../static/stylesheet.css">
+        <title>Fake news Analyzer</title>
+{% endblock %}
+
+{% block content %}
+    <nav class="navbar d-flex justify-content-between">
+          <img src="../static/images/twitter_logo_round.png" class="logo" alt="Logo">
+          <h1 style="font-size: 1.5vmax; text-align: right;">FAKE NEWS ANALYZER</h1>
+    </nav>
+
+    <div class="container-fluid" style="padding: 10em 8em">
+        <div class="row main-cont">
+                <div class="col-md-5">
+                    <div class="card" id="form_card" style="box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15), 0 3px 10px 0 rgba(0, 0, 0, 0.15); border: none; border-radius: .75rem">
+                        <div class="card-body" style="padding: 3.5em 3.5em 3.5em 3.5em;">
+                            <h3 class="card-title" style="margin-bottom: 25px; font-family: 'Roboto Medium'">
+                                <strong>Scarica un nuovo set di tweet</strong>
+                            </h3>
+                            <form id="main_form" action="" method="post" style="font-family: 'Roboto'; color: #5a6268">
+                                {{ form.hidden_tag() }}
+                                {{ wtf.form_field(form.set_name) }}
+                                {{ wtf.form_field(form.search_keyword) }}
+                                {{ wtf.form_field(form.tweets_number) }}
+                                {{ wtf.form_field(form.submit, button_map={'submit':'success'}) }}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="card" style="max-height: 640px; box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15), 0 3px 10px 0 rgba(0, 0, 0, 0.15); border: none; border-radius: .75rem">
+                        <div class="card-body" style="padding: 3.5em 3em 3.5em 3em;">
+                            <h3 class="card-title" style="margin-bottom: 25px; font-family: 'Roboto Medium'"><strong>Set già scaricati</strong></h3>
+                            <div class="table-responsive" style="max-height: 480px">
+                                <table class="table table-hover table-borderless">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Set Name</th>
+                                            <th scope="col">Search Keyword</th>
+                                            <th scope="col">Number of Tweets</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for set in tweets_sets %}
+                                            <tr>
+                                                <th scope="row">{{ set.id }}</th>
+                                                <td>{{ set.set_name }}</td>
+                                                <td>{{ set.search_keyword }}</td>
+                                                <td>{{ set.tweets_number }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+            crossorigin="anonymous"></script>
+{% endblock %}
+
