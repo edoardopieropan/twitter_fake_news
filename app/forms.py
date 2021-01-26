@@ -9,3 +9,9 @@ class TweetsSetDownloadForm(FlaskForm):
     tweets_number = SelectField("Number of tweets", validators=[DataRequired()],
                                 choices=[str(i) for i in range(1, 21)])
     submit = SubmitField("Submit")
+
+
+class UserForm(FlaskForm):
+    username = StringField("Username", validators=[DataRequired()])
+    tweets_set_to_use = SelectField("Tweets Set", validators=[DataRequired()])
+    submit = SubmitField("Submit")

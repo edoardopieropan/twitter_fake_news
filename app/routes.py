@@ -5,9 +5,9 @@ from app.scripts import get_tweets
 from app.scripts import websitescraping
 from app.scripts import nlp
 
-from app.forms import TweetsSetDownloadForm
+from app.forms import TweetsSetDownloadForm, UserForm
 
-from app.utils import load_json, write_json
+from app.utils import load_csv, write_csv, append_to_csv, load_json, write_json
 
 from datetime import datetime
 import os
@@ -46,22 +46,51 @@ def homepage():
 @app.route("/download_tweets_sets", methods=['GET', 'POST'])
 def download_tweets_sets():
     form = TweetsSetDownloadForm()
-    if os.path.exists(app.config['TWEETS_SETS_JSON']):
-        data = load_json(app.config['TWEETS_SETS_JSON'])
+    if os.path.exists(app.config['TWEETS_SETS_FILE']):
+        data = load_json(app.config['TWEETS_SETS_FILE'])
     else:
         data = []
     if form.validate_on_submit():
-        new_set_id = form.set_name.data + "-" + str(int(datetime.timestamp(datetime.now())))
+        new_set_id = form.set_name.data.replace(" ", "_") + "_" + str(int(datetime.timestamp(datetime.now())))
         new_set = {"id": new_set_id,
                    "set_name": form.set_name.data,
                    "search_keyword": form.search_keyword.data,
                    "tweets_number": int(form.tweets_number.data)}
         create_tweet_set(new_set_id, form.search_keyword.data, int(form.tweets_number.data))
         data.append(new_set)
-        write_json(app.config['TWEETS_SETS_JSON'], data)
+        write_json(app.config['TWEETS_SETS_FILE'], data)
         return redirect('/download_tweets_sets')
 
     return render_template("tweets_set_download.html", form=form, tweets_sets=data)
+
+
+@app.route('/start_test', methods=['GET', 'POST'])
+def start_test():
+    if os.path.exists(app.config['USERS_FILE']):
+        data = load_json(app.config['USERS_FILE'])
+    else:
+        data = []
+    # creating the choices for the select field
+    if os.path.exists(app.config['TWEETS_SETS_FILE']):
+        tweets_sets = load_json(app.config['TWEETS_SETS_FILE'])
+    else:
+        # TODO: add error message, create at least one tweets set
+        return redirect("/index")
+    tweets_sets = [(ts['id'], ts['id']) for ts in tweets_sets]
+    form = UserForm()
+    form.tweets_set_to_use.choices = tweets_sets
+    if form.validate_on_submit():
+        new_user_id = form.username.data.replace(" ", "_") + "_" + str(int(datetime.timestamp(datetime.now())))
+        new_user ={"id": new_user_id,
+                   "username": form.username.data,
+                   "tweets_set": form.tweets_set_to_use.data,
+                   "test_timestamp": int(datetime.timestamp(datetime.now()))}
+        data.append(new_user)
+        write_json(app.config['USERS_FILE'], data)
+        return redirect("/start_test")
+
+    return render_template("start_test.html", form=form)
+
 
 
 @app.route('/tweets', methods=['GET'])
