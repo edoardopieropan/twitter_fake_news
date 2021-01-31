@@ -1,48 +1,44 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/stylesheet.css">
-    <title>Fake news Analyzer</title>
-    
-  </head>
-  <body>
+{% extends 'bootstrap/base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block head %}
+    {% include "head.html" %}
+{% endblock %}
+
+
+{% block content %}
      <!-- LOADING -->
     <div id="overlay">
       <div class="d-flex justify-content-center" style="width: 100%; height: 100%;">  <!-- DISAPPEARS AFTER 5 SEC -->
-        <div class="spinner-grow spinner" role="status"> 
+        <div class="spinner-grow spinner" role="status">
           <span class="sr-only">Loading...</span>
         </div>
       </div>
     </div>
     <!-- END LOADING -->
 
-    <!-- NAVBAR -->
-    <nav class="navbar d-flex justify-content-between">
-        <img src="../static/images/twitter_logo_round.png" class="logo" alt="Logo">
-        <h1 style="font-size: 1.5vmax; text-align: right;">FAKE NEWS ANALYZER</h1>
-    </nav>
+    {% include "no_interaction_nav.html" %}
+
     <div class="d-flex justify-content-center"><h2>Rate these tweets</h2></div>
     
     <!-- CARD SECTION-->
-    {% for tweet in range(0, len) %}
+    {% for tweet in tweets %}
     <div class="row d-flex justify-content-center"> 
-        <blockquote class="twitter-tweet" data-cards="hidden"><p lang="en" dir="ltr">{{list_tweets[tweet]}}</p>{{list_sources[tweet]}}
-            <a href="https://twitter.com/{{list_sources[tweet]}}/status/{{list_ids[tweet]}}">{{list_times[tweet]}}</a>
+        <blockquote class="twitter-tweet" data-cards="hidden"><p lang="en" dir="ltr">{{ tweet["text"] }}</p>{{ tweet["source"] }}
+            <a href="https://twitter.com/{{ tweet["source"] }}/status/{{ tweet["id"] }}">{{ tweet["created_at"] }}</a>
         </blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     </div>
     <div class="row d-flex justify-content-center" style="padding-right:5vw; padding-left:5vw; padding-bottom:2vh;">
         <!-- RATE BUTTONS -->
-        <form id="form{{tweet}}" class="row d-flex justify-content-center btn-group-toggle" data-toggle="buttons">
+        <form id="form{{ loop.index }}" class="row d-flex justify-content-center btn-group-toggle" data-toggle="buttons">
           <div class="col-lg-3 m-1 btn btn-outline-light" style="min-width:10vh;">
-            <input type="radio" name="options"  style="width: 100%;" value="Fake" autocomplete="off" id="{{list_ids[tweet]}}" required>Fake
+            <input type="radio" name="options"  style="width: 100%;" value="Fake" autocomplete="off" id="{{ tweet["id"] }}" required>Fake
           </div>
           <div class="col-lg-3 m-1 btn btn-outline-light" style="min-width:10vh;">
-            <input type="radio" name="options" style="width: 100%;" value="Maybe" autocomplete="off" id="{{list_ids[tweet]}}">Maybe
+            <input type="radio" name="options" style="width: 100%;" value="Maybe" autocomplete="off" id="{{ tweet["id"] }}">Maybe
           </div>
           <div class="col-lg-3 m-1 btn btn-outline-light" style="min-width:10vh;">
-            <input type="radio" name="options"  style="width: 100%;" value="Truth" autocomplete="off" id="{{list_ids[tweet]}}">Truth
+            <input type="radio" name="options"  style="width: 100%;" value="True" autocomplete="off" id="{{ tweet["id"] }}">True
           </div>
         </form>
         <!-- END RATE BUTTONS -->
@@ -54,17 +50,18 @@
     <div class="row justify-content-center padded" style=" margin: 0;">
       <input class="btn btn-success confirm-button" type="button" value="CONFIRM" onclick="myFunction()">
     </div>
-  
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block scripts %}
+    {% include "scripts.html" %}
+
     <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
     <script> 
     
         function myFunction() {
             var formData = {};
             let count = 0;
-            var len = {{ len }}
+            var len = {{ set_length }}
             $('input:radio').each(function () {
               
               //id does not identify a tweet
@@ -80,7 +77,7 @@
             console.log(len);
             console.log(count);
             if((count)==len){
-              fadeLoading()
+              {#fadeLoading()#}
               $.ajax({
               type: "POST",
               url: "/results",
@@ -96,7 +93,7 @@
               } 
               });
             } else {
-              window.alert("Missinig choice");
+              window.alert("Missing choice");
             }
         }
         
@@ -104,12 +101,12 @@
           $('#overlay').fadeIn();
         }
     </script> 
+
     <script>
       $(window).on('load', function () {
         setTimeout(function(){
           $('#overlay').fadeOut();
-        }, 5000);
+        }, 3000);
     });
     </script>
-  </body>
-</html>
+{% endblock %}

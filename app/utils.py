@@ -3,7 +3,7 @@ import csv
 
 
 def load_json(filepath):
-    with open(filepath) as f:
+    with open(filepath, encoding="utf-8") as f:
         data = json.load(f)
         return data
 

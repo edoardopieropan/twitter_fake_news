@@ -3,13 +3,7 @@
 {% set active_page = "start_test" %}
 
 {% block head %}
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-
-    <!-- My CSS -->
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='stylesheet.css') }}">
-    <title>Fake news Analyzer</title>
+    {% include "head.html" %}
 {% endblock %}
 
 {% block content %}
@@ -18,10 +12,10 @@
     <div class="container-fluid" style="padding: 10em 8em">
         <div class="row main-cont">
             <div class="col-md-12">
-                <div class="card" id="form_card" style="alignment: center; box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15), 0 3px 10px 0 rgba(0, 0, 0, 0.15); border: none; border-radius: .75rem">
+                <div class="card" id="form_card" style="alignment: center; box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15), 0 3px 10px 0 rgba(0, 0, 0, 0.15); border: none; border-radius: .75rem; width: 40%">
                     <div class="card-body" style="padding: 3.5em 3.5em 3.5em 3.5em;">
                         <h3 class="card-title" style="margin-bottom: 25px; font-family: 'Roboto Medium'">
-                            <strong>Scarica un nuovo set di tweet</strong>
+                            <strong>Inizia il test</strong>
                         </h3>
                         <form id="main_form" action="" method="post" style="font-family: 'Roboto'; color: #5a6268">
                             {{ form.hidden_tag() }}
@@ -37,8 +31,6 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+    {% include "scripts.html" %}
 {% endblock %}
 

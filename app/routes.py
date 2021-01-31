@@ -1,7 +1,13 @@
-from app import app
-from flask import render_template, request, flash, redirect
+# todo: alcuni tweet potrebbero non essere più disponibili, non visualizzarli magari
+# todo: se arrivo in una qualsiasi view function con la sessione settata poppo l'utente
+# todo: aggiungere messaggi di errore se vado in una pagina senza permesso
+# todo: il calcolo dei metodi viene fatto alla creazione del set, non ha senso farlo dopo
+# todo: aggiungere generazione form dinamica, salvato il segnalibro con spiegazioni
 
-from app.scripts import get_tweets
+from app import app
+from flask import render_template, request, flash, redirect, session, url_for
+
+from app.scripts.get_tweets import create_tweets_set
 from app.scripts import websitescraping
 from app.scripts import nlp
 
@@ -12,33 +18,11 @@ from app.utils import load_csv, write_csv, append_to_csv, load_json, write_json
 from datetime import datetime
 import os
 
-NUM_PAGES = 2
-
-
-def create_tweet_set(new_set_id, search_keyword, num_tweets):
-    # list of tweets
-    tweets = []
-    list_sources, list_tweets_text, list_times, list_ids = [], [], [], []
-
-    list_tweets = get_tweets.get(search_keyword, num_tweets)
-    for tweet in list_tweets:
-        list_sources.append(tweet[0])
-        list_tweets_text.append(tweet[1])
-        list_times.append(tweet[2])
-        list_ids.append(tweet[3])
-        t = {"source": tweet[0],
-             "text": tweet[1],
-             "created_at": tweet[2].strftime("%Y-%m-%d %H:%M:%S"),
-             "id": tweet[3]}
-        tweets.append(t)
-
-    write_json(os.path.join(app.config['TWEETS_SETS_DIR'], new_set_id + ".json"), tweets)
-
 
 # defining home page
 @app.route("/")
 @app.route("/index")
-def homepage():
+def index():
     # returning index.html
     return render_template("index.html")
 
@@ -56,10 +40,10 @@ def download_tweets_sets():
                    "set_name": form.set_name.data,
                    "search_keyword": form.search_keyword.data,
                    "tweets_number": int(form.tweets_number.data)}
-        create_tweet_set(new_set_id, form.search_keyword.data, int(form.tweets_number.data))
+        create_tweets_set(new_set_id, form.search_keyword.data, int(form.tweets_number.data))
         data.append(new_set)
         write_json(app.config['TWEETS_SETS_FILE'], data)
-        return redirect('/download_tweets_sets')
+        return redirect(url_for("download_tweets_sets"))
 
     return render_template("tweets_set_download.html", form=form, tweets_sets=data)
 
@@ -75,30 +59,36 @@ def start_test():
         tweets_sets = load_json(app.config['TWEETS_SETS_FILE'])
     else:
         # TODO: add error message, create at least one tweets set
-        return redirect("/index")
+        return redirect(url_for("index"))
     tweets_sets = [(ts['id'], ts['id']) for ts in tweets_sets]
     form = UserForm()
     form.tweets_set_to_use.choices = tweets_sets
     if form.validate_on_submit():
         new_user_id = form.username.data.replace(" ", "_") + "_" + str(int(datetime.timestamp(datetime.now())))
-        new_user ={"id": new_user_id,
-                   "username": form.username.data,
-                   "tweets_set": form.tweets_set_to_use.data,
-                   "test_timestamp": int(datetime.timestamp(datetime.now()))}
+        new_user = {"id": new_user_id,
+                    "username": form.username.data,
+                    "tweets_set": form.tweets_set_to_use.data,
+                    "test_timestamp": int(datetime.timestamp(datetime.now()))}
         data.append(new_user)
         write_json(app.config['USERS_FILE'], data)
-        return redirect("/start_test")
+
+        session["user_id"] = new_user_id
+        session["tweets_set"] = form.tweets_set_to_use.data
+
+        return redirect(url_for("test_tweets"))
 
     return render_template("start_test.html", form=form)
 
 
+@app.route('/test_tweets', methods=['GET', 'POST'])
+def test_tweets():
+    if "user_id" not in session:
+        return redirect(url_for("start_test"))
 
-@app.route('/tweets', methods=['GET'])
-def tweetPage():
-    # returning list_tweets.html and list
-    # and length of list to html page
-    return render_template("list_tweets.html", len=len(list_tweets), list_tweets=list_tweets_text, list_sources=list_sources,
-                           list_times=list_times, list_ids=list_ids)
+    tweets_set = load_json(os.path.join(app.config["TWEETS_SETS_DIR"], session["tweets_set"] + ".json"))
+
+    # return test_tweets.html and list and length of list to html page
+    return render_template("test_tweets.html", set_length=len(tweets_set), tweets=tweets_set)
 
 
 @app.route('/results', methods=['POST'])
