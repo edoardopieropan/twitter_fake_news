@@ -1,8 +1,10 @@
-# todo: alcuni tweet potrebbero non essere più disponibili, non visualizzarli magari
+# todo: alcuni tweet potrebbero non essere più disponibili, visualizzarli con card normale e aggiungere disclaimer
 # todo: se arrivo in una qualsiasi view function con la sessione settata poppo l'utente
 # todo: aggiungere messaggi di errore se vado in una pagina senza permesso
 # todo: il calcolo dei metodi viene fatto alla creazione del set, non ha senso farlo dopo
 # todo: aggiungere generazione form dinamica, salvato il segnalibro con spiegazioni
+# todo: salvare in json utente/sessione sia timestamp inizio che fine
+
 
 from app import app
 from flask import render_template, request, flash, redirect, session, url_for
