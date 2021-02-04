@@ -20,87 +20,42 @@
     {% include "no_interaction_nav.html" %}
 
     <div class="d-flex justify-content-center"><h2>Rate these tweets</h2></div>
-    
-    <!-- CARD SECTION-->
-    {% for tweet in tweets %}
-    <div class="row d-flex justify-content-center"> 
-        <blockquote class="twitter-tweet" data-cards="hidden"><p lang="en" dir="ltr">{{ tweet["text"] }}</p>{{ tweet["source"] }}
-            <a href="https://twitter.com/{{ tweet["source"] }}/status/{{ tweet["id"] }}">{{ tweet["created_at"] }}</a>
-        </blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-    </div>
-    <div class="row d-flex justify-content-center" style="padding-right:5vw; padding-left:5vw; padding-bottom:2vh;">
-        <!-- RATE BUTTONS -->
-        <form id="form{{ loop.index }}" class="row d-flex justify-content-center btn-group-toggle" data-toggle="buttons">
-          <div class="col-lg-3 m-1 btn btn-outline-light" style="min-width:10vh;">
-            <input type="radio" name="options"  style="width: 100%;" value="Fake" autocomplete="off" id="{{ tweet["id"] }}" required>Fake
-          </div>
-          <div class="col-lg-3 m-1 btn btn-outline-light" style="min-width:10vh;">
-            <input type="radio" name="options" style="width: 100%;" value="Maybe" autocomplete="off" id="{{ tweet["id"] }}">Maybe
-          </div>
-          <div class="col-lg-3 m-1 btn btn-outline-light" style="min-width:10vh;">
-            <input type="radio" name="options"  style="width: 100%;" value="True" autocomplete="off" id="{{ tweet["id"] }}">True
-          </div>
-        </form>
-        <!-- END RATE BUTTONS -->
-    </div>
-    {% endfor %}
-    <!-- END CARD SECTION -->
 
-    <!-- CONFIRM BUTTON -->
-    <div class="row justify-content-center padded" style=" margin: 0;">
-      <input class="btn btn-success confirm-button" type="button" value="CONFIRM" onclick="myFunction()">
+        <form id="test_form" action="" method="post" class="btn-group-toggle" style="font-family: 'Roboto'; color: #5a6268">
+            {% for tweet in tweets %}
+                <div class="row d-flex justify-content-center">
+                    <blockquote class="twitter-tweet" data-cards="hidden"><p lang="en" dir="ltr">{{ tweet["text"] }}</p>{{ tweet["source"] }}
+                        <a href="https://twitter.com/{{ tweet["source"] }}/status/{{ tweet["id"] }}">{{ tweet["created_at"] }}</a>
+                    </blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <div class="btn-group-toggle" data-toggle="buttons">
+                        {{ form.hidden_tag() }}
+                        {% for subfield in form[tweet["progressive"]] %}
+                            <label class="btn btn-outline-light">
+                                {{ subfield }} {{ subfield.label }}
+                            </label>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            {% endfor %}
+
+            <!-- CONFIRM BUTTON -->
+            <div class="row justify-content-center padded" style=" margin: 0;">
+                {{ wtf.form_field(form.submit, button_map={'submit':'success'}) }}
+            </div>
+        </form>
     </div>
+    <!-- END CARD SECTION -->
 {% endblock %}
 
 {% block scripts %}
     {% include "scripts.html" %}
 
     <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-    <script> 
-    
-        function myFunction() {
-            var formData = {};
-            let count = 0;
-            var len = {{ set_length }}
-            $('input:radio').each(function () {
-              
-              //id does not identify a tweet
-              var $this = $(this),
-                  value = $this.attr('value')
-                  id = String($this.attr('id'))
-              if ($(this).prop('checked')) {
-                  formData[id]=value
-                  count++;
-              }
-            });
-            console.log(formData);
-            console.log(len);
-            console.log(count);
-            if((count)==len){
-              {#fadeLoading()#}
-              $.ajax({
-              type: "POST",
-              url: "/results",
-              traditional: "true",
-              data: JSON.stringify({formData}),
-              contentType: "application/json",
-              success: function (data) {
-                document.write(data);
-              },
-              error: function (xhr, error) {
-                console.debug(xhr); 
-                console.debug(error);
-              } 
-              });
-            } else {
-              window.alert("Missing choice");
-            }
-        }
-        
-        function fadeLoading(){
-          $('#overlay').fadeIn();
-        }
-    </script> 
+
+
 
     <script>
       $(window).on('load', function () {

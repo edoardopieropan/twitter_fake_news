@@ -31,7 +31,7 @@ def create_tweets_set(new_set_id, search_keyword, num_tweets):
     list_sources, list_tweets_text, list_times, list_ids = [], [], [], []
 
     list_tweets = get_tweets(search_keyword, num_tweets)
-    for tweet in list_tweets:
+    for i, tweet in enumerate(list_tweets):
         list_sources.append(tweet[0])
         list_tweets_text.append(tweet[1])
         list_times.append(tweet[2])
@@ -39,7 +39,8 @@ def create_tweets_set(new_set_id, search_keyword, num_tweets):
         t = {"source": tweet[0],
              "text": tweet[1],
              "created_at": tweet[2].strftime("%Y-%m-%d %H:%M:%S"),
-             "id": tweet[3]}
+             "id": tweet[3],
+             "progressive": f"t{i}"}
         tweets.append(t)
 
     write_json(os.path.join(app.config['TWEETS_SETS_DIR'], new_set_id + ".json"), tweets)

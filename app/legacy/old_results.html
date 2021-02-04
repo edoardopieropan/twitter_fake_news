@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/stylesheet.css">
+    <title>Twitter Fake News</title>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar d-flex justify-content-between">
+      <img src="static/images/twitter_logo_round.png" class="logo" alt="Logo">
+      <h1 style="font-size: 1.5vmax; text-align: right;">FAKE NEWS ANALYZER</h1>
+  </nav>
+  <div class="d-flex justify-content-center"><h2>Results</h2></div>
+
+    <!-- CARD SECTION-->
+    <section class="container-fluid d-flex justify-content-center">
+      <div class="row d-flex justify-content-center" style="padding-right:5vw; padding-left:5vw; width: 100%;"> 
+        {% for tweet in range(0, len) %}
+        {% if list_results[tweet] > 65 %}
+        <div class="card text-dark border-danger mx-auto  b-3" style="min-width:30vw; width:40vmax; height:auto">
+        {% elif list_results[tweet] > 50 %}
+        <div class="card text-dark border-warning mx-auto b-3" style="min-width:30vw; width:40vmax; height:auto">
+        {% else %}
+        <div class="card text-dark border-primary mx-auto  b-3" style="min-width:30vw; width:40vmax; height:auto">
+        {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{list_sources[tweet]}}</h5>
+            <p class=" font-italic">{{list_tweets[tweet]}}</p>
+            <small class="text-muted float-right">{{list_times[tweet]}}</small>
+          </div>
+          <div class="card-footer">
+            <h2>Fake {{list_results[tweet]}}%</h2>
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+    </section>
+    <!-- END CARD SECTION -->
+
+    <!-- CONFIRM BUTTON -->
+    <div class="row justify-content-center padded" style=" margin: 0;">
+      <input class="btn btn-success confirm-button" type="button" value="HOME" onclick="myFunction()">
+    </div>
+  
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+ 
+    <script> 
+    
+        function myFunction() {
+          window.location.href = '/';
+        }
+    </script> 
+  </body>
+</html>

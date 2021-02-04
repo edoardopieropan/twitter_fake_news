@@ -20,7 +20,7 @@
                             <form id="main_form" action="" method="post" style="font-family: 'Roboto'; color: #5a6268">
                                 {{ form.hidden_tag() }}
                                 {{ wtf.form_field(form.set_name) }}
-                                {{ wtf.form_field(form.search_keyword) }}
+                                {{ wtf.form_field(form.search_query) }}
                                 {{ wtf.form_field(form.tweets_number) }}
                                 {{ wtf.form_field(form.submit, button_map={'submit':'success'}) }}
                             </form>
@@ -37,7 +37,7 @@
                                         <tr>
                                             <th scope="col">ID</th>
                                             <th scope="col">Set Name</th>
-                                            <th scope="col">Search Keyword</th>
+                                            <th scope="col">Search Query</th>
                                             <th scope="col">Number of Tweets</th>
                                         </tr>
                                     </thead>
@@ -46,7 +46,7 @@
                                             <tr>
                                                 <th scope="row">{{ set.id }}</th>
                                                 <td>{{ set.set_name }}</td>
-                                                <td>{{ set.search_keyword }}</td>
+                                                <td>{{ set.search_query }}</td>
                                                 <td>{{ set.tweets_number }}</td>
                                             </tr>
                                         {% endfor %}
