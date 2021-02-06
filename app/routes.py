@@ -2,6 +2,7 @@
 # todo: se arrivo in una qualsiasi view function con la sessione settata poppo l'utente
 # todo: aggiungere messaggi di errore se vado in una pagina senza permesso
 # todo: il calcolo dei metodi viene fatto alla creazione del set, non ha senso farlo dopo
+# todo: polishing estetico
 
 # note: cambiato metodo salvataggio lista utenti
 

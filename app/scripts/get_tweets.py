@@ -1,8 +1,11 @@
 import tweepy as tw
 from app import app
 import os
+import datetime
 
 from app.utils import write_json, load_json
+from app.scripts.nlp import get_fact_checking
+from app.scripts.websitescraping import get_bufale
 
 
 # return n tweets containing the given hashtag
@@ -13,7 +16,7 @@ def get_tweets(search_query, n):
 
     # Define the search query and the date_since date as variables
     search_query = search_query + "-filter:retweets"
-    date_since = "2021-01-01"
+    date_since = (datetime.datetime.now() - datetime.timedelta(days=7)).date().strftime("%Y-%m-%d")  # max from a week ago
 
     # Collect tweets
     tweets = tw.Cursor(api.search,
@@ -28,19 +31,19 @@ def get_tweets(search_query, n):
 def create_tweets_set(new_set_id, search_keyword, num_tweets):
     # list of tweets
     tweets = []
-    list_sources, list_tweets_text, list_times, list_ids = [], [], [], []
 
     list_tweets = get_tweets(search_keyword, num_tweets)
+    bufale = get_bufale(2)
+
+    print("started fact checking")
     for i, tweet in enumerate(list_tweets):
-        list_sources.append(tweet[0])
-        list_tweets_text.append(tweet[1])
-        list_times.append(tweet[2])
-        list_ids.append(tweet[3])
         t = {"source": tweet[0],
              "text": tweet[1],
              "created_at": tweet[2].strftime("%Y-%m-%d %H:%M:%S"),
              "id": tweet[3],
-             "progressive": f"t{i}"}
+             "progressive": f"t{i}",
+             "fact_checking": get_fact_checking(tweet[1], bufale)}
+
         tweets.append(t)
 
     write_json(os.path.join(app.config['TWEETS_SETS_DIR'], new_set_id + ".json"), tweets)
