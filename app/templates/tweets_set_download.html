@@ -7,31 +7,43 @@
 {% endblock %}
 
 {% block content %}
+    <!-- LOADING -->
+    <div id="overlay" style="display:none; background: rgb(136,213,201);background: linear-gradient(72deg, rgba(136,213,201,1) 0%, rgba(53,76,218,1) 100%);">
+      <div class="d-flex justify-content-center" style="width: 100%; height: 100%;">  <!-- DISAPPEARS AFTER 5 SEC -->
+        <div class="spinner-grow spinner text-light" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+    <!-- END LOADING -->
+
     {% include "nav.html" %}
 
     <div class="container-fluid" style="padding: 10em 8em">
-        <div class="row main-cont">
-                <div class="col-md-5">
+        <div class="row main-cont justify-content-md-center">
+                <div class="col-md-4">
                     <div class="card" id="form_card" style="box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15), 0 3px 10px 0 rgba(0, 0, 0, 0.15); border: none; border-radius: .75rem">
                         <div class="card-body" style="padding: 3.5em 3.5em 3.5em 3.5em;">
                             <h3 class="card-title" style="margin-bottom: 25px; font-family: 'Roboto Medium'">
-                                <strong>Scarica un nuovo set di tweet</strong>
+                                <strong>Download a new set of tweets</strong>
                             </h3>
                             <form id="main_form" action="" method="post" style="font-family: 'Roboto'; color: #5a6268">
                                 {{ form.hidden_tag() }}
                                 {{ wtf.form_field(form.set_name) }}
                                 {{ wtf.form_field(form.search_query) }}
                                 {{ wtf.form_field(form.tweets_number) }}
-                                {{ wtf.form_field(form.submit, button_map={'submit':'success'}) }}
+                                <div class="text-right"> <!--You can add col-lg-12 if you want -->
+                                    {{ wtf.form_field(form.submit, button_map={'submit':'primary'}) }}
+                                </div>
                             </form>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-7">
-                    <div class="card" style="max-height: 640px; box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15), 0 3px 10px 0 rgba(0, 0, 0, 0.15); border: none; border-radius: .75rem">
+                    <div class="card" style="max-height: 550px; box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15), 0 3px 10px 0 rgba(0, 0, 0, 0.15); border: none; border-radius: .75rem">
                         <div class="card-body" style="padding: 3.5em 3em 3.5em 3em;">
-                            <h3 class="card-title" style="margin-bottom: 25px; font-family: 'Roboto Medium'"><strong>Set già scaricati</strong></h3>
-                            <div class="table-responsive" style="max-height: 480px">
+                            <h3 class="card-title" style="margin-bottom: 25px; font-family: 'Roboto Medium'"><strong>Downloaded sets</strong></h3>
+                            <div class="table-responsive" style="max-height: 400px">
                                 <table class="table table-hover table-borderless">
                                     <thead>
                                         <tr>
@@ -59,10 +71,18 @@
             </div>
         </div>
     </div>
+    {% include "footer.html" %}
 {% endblock %}
 
 {% block scripts %}
     {% include "scripts.html" %}
+    <script>
+        $(document).ready(function(){
+            $('#main_form').on("submit",function(){
+                console.log("Loading...");
+                $('#overlay').fadeIn();
+            });
+        })
+    </script>
+
 {% endblock %}
-
-

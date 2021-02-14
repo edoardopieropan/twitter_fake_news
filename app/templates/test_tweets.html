@@ -8,9 +8,9 @@
 
 {% block content %}
      <!-- LOADING -->
-    <div id="overlay">
+    <div id="overlay" style="background: rgb(136,213,201);background: linear-gradient(72deg, rgba(136,213,201,1) 0%, rgba(53,76,218,1) 100%);">
       <div class="d-flex justify-content-center" style="width: 100%; height: 100%;">  <!-- DISAPPEARS AFTER 5 SEC -->
-        <div class="spinner-grow spinner" role="status">
+        <div class="spinner-grow spinner text-light" role="status">
           <span class="sr-only">Loading...</span>
         </div>
       </div>
@@ -19,34 +19,49 @@
 
     {% include "no_interaction_nav.html" %}
 
-    <div class="d-flex justify-content-center"><h2>Rate these tweets</h2></div>
+{#    <div class="d-flex justify-content-center"><h2>Rate these tweets</h2></div>#}
+    <div class="container-fluid" style="padding: 0 0 5em 0">
+        <div class="text-center" style="display: flex; flex-direction: column; justify-content: center; height: 20em; color:white; background: rgb(136,213,201);background: linear-gradient(72deg, rgba(136,213,201,1) 0%, rgba(53,76,218,1) 100%);">
+            <div class="col-sm-4 mx-auto">
+                <div class="display-4" style="font-family: 'Roboto Black'">Rate these tweets</div>
+                <h5>Give a vote to each one of this tweet, if in your opinion one refers or it is comparable to a fake news. Avoid choosing maybe if possible.</h5>
+            </div>
+        </div>
+        <div class="row main-cont">
+            <div class="col-sm-4 mx-auto">
+                <div class="row justify-content-center" style="padding-top: 2em;">
+                    <form id="test_form" action="" method="post" class="btn-group-toggle" style="font-family: 'Roboto'; color: #5a6268">
+                        {% for tweet in tweets %}
+                            <div class="text-center" style="padding-top: 3em;">
+                                <div class="card border-secondary mx-auto">
+                                    <div class="card-body">
+                                        <p class="card-text font-italic text-left">{{ tweet["text"] }}</p>
+                                        <small class="text-muted float-left">from: {{ tweet["source"] }}</small>
+                                        <small class="text-muted float-right">{{ tweet["created_at"] }}</small>
+                                    </div>
+                                </div>
 
-        <form id="test_form" action="" method="post" class="btn-group-toggle" style="font-family: 'Roboto'; color: #5a6268">
-            {% for tweet in tweets %}
-                <div class="row d-flex justify-content-center">
-                    <blockquote class="twitter-tweet" data-cards="hidden"><p lang="en" dir="ltr">{{ tweet["text"] }}</p>{{ tweet["source"] }}
-                        <a href="https://twitter.com/{{ tweet["source"] }}/status/{{ tweet["id"] }}">{{ tweet["created_at"] }}</a>
-                    </blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-                </div>
-                <div class="row d-flex justify-content-center">
-                    <div class="btn-group-toggle" data-toggle="buttons">
-                        {{ form.hidden_tag() }}
-                        {% for subfield in form[tweet["progressive"]] %}
-                            <label class="btn btn-outline-light">
-                                {{ subfield }} {{ subfield.label }}
-                            </label>
+                                <div class="btn-group-toggle" data-toggle="buttons" style="padding-top: 2em">
+                                    {{ form.hidden_tag() }}
+                                    {% for subfield in form[tweet["progressive"]] %}
+                                        <label class="btn btn-outline-primary">
+                                            {{ subfield }} {{ subfield.label }}
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
                         {% endfor %}
 
-                    </div>
+                        <!-- CONFIRM BUTTON -->
+                        <div class="text-right" style="padding-top: 5em;">
+                            {{ wtf.form_field(form.submit, button_map={'submit':'primary'}) }}
+                        </div>
+                    </form>
                 </div>
-            {% endfor %}
-
-            <!-- CONFIRM BUTTON -->
-            <div class="row justify-content-center padded" style=" margin: 0;">
-                {{ wtf.form_field(form.submit, button_map={'submit':'success'}) }}
             </div>
-        </form>
+        </div>
     </div>
+    {% include "footer.html" %}
     <!-- END CARD SECTION -->
 {% endblock %}
 
@@ -61,7 +76,7 @@
       $(window).on('load', function () {
         setTimeout(function(){
           $('#overlay').fadeOut();
-        }, 3000);
+        }, 1000);
     });
     </script>
 {% endblock %}

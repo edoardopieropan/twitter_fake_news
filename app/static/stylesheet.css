@@ -1,9 +1,11 @@
 
 html,body{
     align-content: center;
-    background-color: #1DA1F2 ;
+    /*background-color: #1DA1F2 ;*/
+    background-color: #f8f9fa!important;
     max-width: 100%;
     overflow-x: hidden;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 }
 .spinner{
   z-index: 3; 

@@ -1,89 +1,32 @@
-<!DOCTYPE html>
-<html>
-
+{% import 'bootstrap/wtf.html' as wtf %}
 {% set active_page = "index" %}
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/stylesheet.css">
-    <title>Fake news Analyzer</title>
-    
-  </head>
-  <body>
+
+{% block head %}
+    {% include "head.html" %}
+{% endblock %}
+
+
+{% block content %}
     {% include "nav.html" %}
     
-    <div class="container">
-      <div class="row justify-content-center">
-        <h1>Instruction</h1><br>
-      </div>
-      <div class="row justify-content-center">
-        <div class="col-md-auto card bg-transparent border-light mb-2" style="min-height: 60vh; width: 80vw;">
-          <div id="Carousel" data-interval="false" class="carousel slide" data-ride="carousel" style="height: 100%;">
-            <ol class="carousel-indicators">
-              <li data-target="#Carousel" data-slide-to="0" class="active"></li>
-              <li data-target="#Carousel" data-slide-to="1"></li>
-              <li data-target="#Carousel" data-slide-to="2"></li>
-            </ol>
-            <div class="carousel-inner justify-content-center">
-              <div class="carousel-item active" id="1">
-                <div class="card-body">
-                  <h5 class="card-title text-white" style="font-size: 5vmax;">Read</h5>
-                  <p class="card-text text-white" style="font-size: 3vmax;">
-                    Read the tweets and think if it could be a fake news
-                  </p>
+    <div class="container-fluid" style="padding: 10em 8em">
+        <div class="row main-cont justify-content-md-center">
+            <div class="col-md-5">
+                <div class="display-1" style="font-family: 'Roboto Black'"><span>How it works</span></div>
+                <div class="col-md-8" style="padding-top: 3em">
+                    <p><h5>1. Download a new set of tweets or choose from those available</h5></p>
+                    <p><h5>2. Read the tweets</h5></p>
+                    <p><h5>3. Choose between one: True, Maybe or Fake</h5></p>
+                    <p><h5>4. Click the confirm button to submit your results</h5></p>
                 </div>
-              </div>
-              <div class="carousel-item" id="2">
-                <div class="card-body">
-                  <h5 class="card-title text-white" style="font-size: 5vmax;">Choose</h5>
-                  <p class="card-text text-white" style="font-size: 3vmax;">
-                    Choose betweet one of the three choices: Fake, Thrut and Maybe
-                  </p>
-                </div>
-              </div>
-              <div class="carousel-item" id="3">
-                <div class="card-body">
-                  <h5 class="card-title text-white" style="font-size: 5vmax;">Confirm</h5>
-                  <p class="card-text text-white" style="font-size: 3vmax;">
-                    Click the confirm button to submit your results and look at the application prediction
-                  </p>
-                </div>
-                
-              </div>
             </div>
-          </div>
-          
-        </div> 
-        <a class="hidden carousel-control-prev" href="#Carousel" role="button" data-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="hidden carousel-control-next" href="#Carousel" role="button" data-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-      </div>
-      <div style="text-align: center; display: none;" id="startButton">
-        <a href="{{ url_for("start_test") }}" class="btn btn-success" style="margin:2vw; min-width:20vw">START</a>
-      </div>
+            <div class="col-md-6" style="height: 500px; background: rgb(136,213,201);background: linear-gradient(72deg, rgba(136,213,201,1) 0%, rgba(53,76,218,1) 100%);">
+            </div>
+        </div>
     </div>
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script>
-      $(function() {
-        $('#Carousel').on('slide.bs.carousel', function onSlide (ev) {
-        var id = ev.relatedTarget.id;
-        switch (id) {
-          case "3":
-            $('#startButton').fadeIn();
-            break;
-          default:
-            break
-        }
-      })
-      });
-    </script>
-  </body>
-</html>
+    {% include "footer.html" %}
+{% endblock %}
+
+{% block scripts %}
+    {% include "scripts.html" %}
+{% endblock %}

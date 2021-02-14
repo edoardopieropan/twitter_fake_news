@@ -27,7 +27,7 @@ def get_similarity(doc1, doc2, method, nlp):
 
     doc1 = nlp(doc1)
     doc2 = nlp(doc2)
-    for i in range(3):
+    for i in range(2):
         d1 = []
         d2 = []
         if method == 1:

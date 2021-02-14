@@ -1,11 +1,12 @@
 import re
 import spacy
 import string
-from spacy.lang.it import STOP_WORDS
+from spacy.lang.it import Italian
 
-import websitescraping
+from websitescraping import get_bufale
 import json
 
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
 def load_json(filepath):
     with open(filepath, encoding="utf-8") as f:
@@ -19,6 +20,9 @@ def write_json(filepath, data):
 
 
 nlp = spacy.load('it_core_news_lg')
+punctuations = string.punctuation
+stop_words = spacy.lang.it.stop_words.STOP_WORDS
+parser = Italian()
 
 
 def deEmojify(text):
@@ -39,6 +43,7 @@ def preprocess(doc1, doc2):
     # # remove punctuation
     # doc1 = doc1.translate(str.maketrans('', '', string.punctuation))
     # doc2 = doc2.translate(str.maketrans('', '', string.punctuation))
+
     # #
     # # remove stopwords
     # doc1 = doc1.split()
@@ -60,10 +65,25 @@ def preprocess(doc1, doc2):
     return doc1, doc2
 
 
+# Creating our tokenizer function
+def spacy_tokenizer(sentence):
+    # Creating our token object, which is used to create documents with linguistic annotations.
+    mytokens = parser(sentence)
+
+    # Lemmatizing each token and converting each token into lowercase
+    mytokens = [ word.lemma_.lower().strip() if word.lemma_ != "-PRON-" else word.lower_ for word in mytokens ]
+
+    # Removing stop words
+    mytokens = [ word for word in mytokens if word not in stop_words and word not in punctuations ]
+
+    # return preprocessed list of tokens
+    return mytokens
+
+
 def get_similarity(doc1, doc2, method):
     # doc1 = doc1.__str__()
     # doc2 = doc2.__str__()
-    doc1, doc2 = preprocess(doc1, doc2)
+    # doc1, doc2 = preprocess(doc1, doc2)
 
     # print("doc1")
     # for w in doc1:
@@ -76,41 +96,61 @@ def get_similarity(doc1, doc2, method):
     # doc1 = nlp(' '.join([str(w) for w in doc1]))
     # doc2 = nlp(' '.join([str(w) for w in doc2 if str(w) not in STOP_WORDS]))
 
-    doc1 = nlp(doc1)
-    doc2 = nlp(doc2)
-    for i in range(5):
-        d1 = []
-        d2 = []
-        if method == 1:
-            for w in doc1:
-                if (not w.is_punct and not w.is_stop and w.pos_ != "DET"):
-                    d1.append(w.lemma_)
+    # doc1 = nlp(doc1)
+    # doc2 = nlp(doc2)
+    # for i in range(2):
+    #     d1 = []
+    #     d2 = []
+    #     if method == 1:
+    #         for w in doc1:
+    #             if (not w.is_punct and not w.is_stop and w.pos_ != "DET"):
+    #                 d1.append(w.lemma_)
+    #
+    #         for w in doc2:
+    #             if (not w.is_punct and not w.is_stop and w.pos_ != "DET"):
+    #                 d2.append(w.lemma_)
+    #     elif method == 2:
+    #         for w in doc1:
+    #             if w.pos_ == "NOUN" or w.pos_ == "PNOUN":
+    #                 d1.append(w.lemma_)
+    #
+    #         for w in doc2:
+    #             if w.pos_ == "NOUN" or w.pos_ == "PNOUN":
+    #                 d2.append(w.lemma_)
 
-            for w in doc2:
-                if (not w.is_punct and not w.is_stop and w.pos_ != "DET"):
-                    d2.append(w.lemma_)
-        elif method == 2:
-            for w in doc1:
-                if w.pos_ == "NOUN" or w.pos_ == "PNOUN":
-                    d1.append(w.lemma_)
+        # doc1 = nlp(" ".join(d1))
+        # doc2 = nlp(" ".join(d2))
 
-            for w in doc2:
-                if w.pos_ == "NOUN" or w.pos_ == "PNOUN":
-                    d2.append(w.lemma_)
+    # doc1 = spacy_tokenizer(doc1)
+    # doc2 = spacy_tokenizer(doc2)
 
-        doc1 = nlp(" ".join(d1))
-        doc2 = nlp(" ".join(d2))
+    bow_vector = CountVectorizer(tokenizer=spacy_tokenizer, ngram_range=(1, 1))
+    tfidf_vector = TfidfVectorizer(tokenizer=spacy_tokenizer, use_idf=True, norm=None)
 
-    print("doc1")
-    for w in doc1:
-        print(f"word: {w.text}, lemma: {w.lemma_}, pos: {w.pos_}")
+    bow_vector2 = CountVectorizer(tokenizer=spacy_tokenizer, ngram_range=(1, 1))
+    tfidf_vector2 = TfidfVectorizer(tokenizer=spacy_tokenizer, use_idf=True, norm=None)
 
-    print("\ndoc2")
-    for w in doc2:
-        print(f"word: {w.text}, lemma: {w.lemma_}, pos: {w.pos_}")
+    # d = bow_vector.fit_transform()
+    # dd = tfidf_vector.fit_transform()
+    # d = [doc1, doc2]
+    # d2 = bow_vector2.fit_transform(doc1)
+    dd2 = tfidf_vector2.fit_transform([doc2])
+
+    # print(d2)
+    print(dd2)
+
+
+
+    # print("doc1")
+    # for w in doc1:
+    #     print(f"word: {w.text} - lemma: {w.lemma_} - pos: {w.pos_} - space: {w.is_space} - norm: {w.vector_norm}")
+    #
+    # print("\ndoc2")
+    # for w in doc2:
+    #     print(f"word: {w.text}, lemma: {w.lemma_}, pos: {w.pos_} - space: {w.is_space} - norm: {w.vector_norm}")
 
     result = doc1.similarity(doc2)
-    print(f"similarity: {result}")
+    # print(f"similarity: {result}")
 
     return result
 
@@ -133,28 +173,37 @@ if __name__ == "__main__":
     # experiment 9 = method 5 -> news title
     # experiment 10 = method 5 -> news body
 
-    tweets = load_json("data/tweets_sets/amadeus_1612001232.json")
-    results = []
-    # bufale = websitescraping.get_bufale(3)
-    # write_json("data/prova_bufale.json", bufale)
-    bufale = load_json("data/prova_bufale.json")
+    # tweets = load_json("C:/Users/atoai/Desktop/twitter_fake_news/data/tweets_sets/ponzio_pilato_1612972806.json")
+    # results = []
+    # # bufale = websitescraping.get_bufale(3)
+    bufale = get_bufale(2)
+    # # write_json("data/prova_bufale.json", bufale)
+    # # bufale = load_json("data/prova_bufale.json")
+    #
+    # print(f"tweets: {len(tweets)}, bufale: {len(bufale)}")
+    #
+    # for t in tweets[0:1]:
+    #     # tweet_res = {"tweet_id": t["id"]}
+    #     # tweet_res["results"] = []
+    #     for b in bufale[3:4]:
+    #         # m = {
+    #         #     "id_bufala": b["id"],
+    #         #     "title_bufala": b["title"],
+    #         #     "first_method": (round(get_similarity(t["text"], b["title"], 1), 2)),
+    #         #     "second_method": (round(get_similarity(t["text"], b["body"], 1), 2)),
+    #         #     "third_method": (round(get_similarity(t["text"], b["title"], 2), 2)),
+    #         #     "fourth_method": (round(get_similarity(t["text"], b["body"], 2), 2))
+    #         # }
+    #         # tweet_res["results"].append(m)
+    #         print(round(get_similarity(t["text"], b["body"], 1), 2))
+    #     # results.append(tweet_res)
 
-    print(f"tweets: {len(tweets)}, bufale: {len(bufale)}")
-
-    for t in tweets[0:1]:
-        tweet_res = {"tweet_id": t["id"]}
-        tweet_res["results"] = []
-        for b in bufale[3:4]:
-            m = {
-                "id_bufala": b["id"],
-                "title_bufala": b["title"],
-                "first_method": (round(get_similarity(t["text"], b["title"], 1), 2)),
-                "second_method": (round(get_similarity(t["text"], b["body"], 1), 2)),
-                "third_method": (round(get_similarity(t["text"], b["title"], 2), 2)),
-                "fourth_method": (round(get_similarity(t["text"], b["body"], 2), 2))
-            }
-            tweet_res["results"].append(m)
-        results.append(tweet_res)
-
+    # doc1 = "ciao mi chiamo gianni ciao ancora e ciao di nuovo"
+    doc1 = bufale[3]["body"]
+    tfidf_vector2 = TfidfVectorizer(tokenizer=spacy_tokenizer, use_idf=True, norm=None)
+    dd2 = tfidf_vector2.fit_transform([doc1])
+    doc1 = spacy_tokenizer(doc1)
+    fn = tfidf_vector2.get_feature_names()
+    print("hi")
     # print(results)
-    write_json("data/prova_results.json", results)
+    # write_json("data/prova_results.json", results)

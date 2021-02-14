@@ -8,22 +8,21 @@
 {% block content %}
     {% include "nav.html" %}
 
-
-    <div class="container-fluid" style="padding: 10em 8em">
+    <div class="container-fluid text-center" style="padding: 10em 8em">
         <div class="row main-cont">
             <div class="col-md-12">
-                <div class="card" id="card" style="alignment: center; box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15), 0 3px 10px 0 rgba(0, 0, 0, 0.15); border: none; border-radius: .75rem; width: 40%">
+                <div class="card col-sm-4 mx-auto text-left" id="card" style="alignment: center; box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15), 0 3px 10px 0 rgba(0, 0, 0, 0.15); border: none; border-radius: .75rem; width: 40%">
                     <div class="card-body" style="padding: 3.5em 3.5em 3.5em 3.5em;">
                         <h3 class="card-title" style="margin-bottom: 25px; font-family: 'Roboto Medium'">
-                            <strong>Test completato</strong>
+                            <strong>Test completed</strong>
                         </h3>
-                        Il test è finito.
-                        <a type="button" class="btn btn-outline-success" href="{{ url_for("index") }}">Torna alla home</a>
+                        <p><a type="button" class="btn btn-primary" href="{{ url_for("index") }}">Back to home</a></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    {% include "footer.html" %}
 {% endblock %}
 
 {% block scripts %}

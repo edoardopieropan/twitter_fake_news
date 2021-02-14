@@ -8,13 +8,13 @@ class TweetsSetDownloadForm(FlaskForm):
     search_query = StringField("Search Query", validators=[DataRequired()])
     tweets_number = SelectField("Number of tweets", validators=[DataRequired()],
                                 choices=[str(i) for i in range(1, 21)])
-    submit = SubmitField("Submit")
+    submit = SubmitField("Download it")
 
 
 class UserForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     tweets_set_to_use = SelectField("Tweets Set", validators=[DataRequired()])
-    submit = SubmitField("Submit")
+    submit = SubmitField("Start")
 
 
 class FieldsRequiredForm(FlaskForm):
@@ -30,4 +30,4 @@ class FieldsRequiredForm(FlaskForm):
 
 
 class TestForm(FieldsRequiredForm):
-    submit = SubmitField("Submit")
+    submit = SubmitField("Send results")

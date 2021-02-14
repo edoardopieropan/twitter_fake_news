@@ -1,7 +1,6 @@
 # todo: alcuni tweet potrebbero non essere più disponibili, visualizzarli con card normale e aggiungere disclaimer
-# todo: se arrivo in una qualsiasi view function con la sessione settata poppo l'utente
+# todo: se arrivo in una qualsiasi view function con la sessione settata lo rimando al test
 # todo: aggiungere messaggi di errore se vado in una pagina senza permesso
-# todo: il calcolo dei metodi viene fatto alla creazione del set, non ha senso farlo dopo
 # todo: polishing estetico
 
 # note: cambiato metodo salvataggio lista utenti
@@ -10,8 +9,6 @@ from app import app
 from flask import render_template, request, flash, redirect, session, url_for
 
 from app.scripts.get_tweets import create_tweets_set
-from app.scripts import websitescraping
-from app.scripts import nlp
 
 from app.forms import TweetsSetDownloadForm, UserForm, TestForm
 from wtforms import RadioField
@@ -132,15 +129,5 @@ def results():
     session.pop("username")
     session.pop("tweets_set_id")
     session.pop("start_timestamp")
-
-    # bufale = websitescraping.get_bufale(NUM_PAGES)
-    # results = []
-    # for t in list_tweets_text:
-    #     results_tmp = []
-    #     for b in bufale:
-    #         results_tmp.append(float(round(nlp.get_similarity(t, b) * 100, 2)))
-    #     results.append(max(results_tmp))
-    #
-    # save_results(user_choices, results)
 
     return render_template("results.html")

@@ -9,25 +9,26 @@
 {% block content %}
     {% include "nav.html" %}
 
-    <div class="container-fluid" style="padding: 10em 8em">
+    <div class="container-fluid text-center" style="padding: 10em 8em">
         <div class="row main-cont">
-            <div class="col-md-12">
-                <div class="card" id="form_card" style="alignment: center; box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15), 0 3px 10px 0 rgba(0, 0, 0, 0.15); border: none; border-radius: .75rem; width: 40%">
-                    <div class="card-body" style="padding: 3.5em 3.5em 3.5em 3.5em;">
-                        <h3 class="card-title" style="margin-bottom: 25px; font-family: 'Roboto Medium'">
-                            <strong>Inizia il test</strong>
-                        </h3>
-                        <form id="main_form" action="" method="post" style="font-family: 'Roboto'; color: #5a6268">
-                            {{ form.hidden_tag() }}
-                            {{ wtf.form_field(form.username) }}
-                            {{ wtf.form_field(form.tweets_set_to_use) }}
-                            {{ wtf.form_field(form.submit, button_map={'submit':'success'}) }}
-                        </form>
-                    </div>
+            <div class="card col-sm-4 mx-auto text-left" id="form_card" style="box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15), 0 3px 10px 0 rgba(0, 0, 0, 0.15); border: none; border-radius: .75rem">
+                <div class="card-body" style="padding: 3.5em 3.5em 3.5em 3.5em;">
+                    <h3 class="card-title" style="margin-bottom: 25px; font-family: 'Roboto Medium'">
+                        <strong>Start the test</strong>
+                    </h3>
+                    <form id="main_form" action="" method="post" style="font-family: 'Roboto'; color: #5a6268">
+                        {{ form.hidden_tag() }}
+                        {{ wtf.form_field(form.username) }}
+                        {{ wtf.form_field(form.tweets_set_to_use) }}
+                        <div class="text-right">
+                            {{ wtf.form_field(form.submit, button_map={'submit':'primary'}) }}
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+    {% include "footer.html" %}
 {% endblock %}
 
 {% block scripts %}
