@@ -78,9 +78,6 @@ When the submit button is pressed the application will add the new set in a *.js
         "set_name": "covid",
         "search_query": "vaccini",
         "tweets_number": 5
-    },
-    {
-        ...
     }
 ]
 ```
@@ -123,9 +120,6 @@ Finally, the results will be stored in set specific *.json* file, structured lik
                 "fn_url": "https://www.bufale.net/link_to_the article"
             }
         }
-    },
-    {
-        ...
     }
 ]
 ```
@@ -163,9 +157,6 @@ and the user is added to a *.json* containing all the test sessions:
     {
         "id": "edoardo_1612475580",
         "username": "edoardo"
-    },
-    {
-        ...
     }
 ]
 ```
@@ -181,7 +172,7 @@ Visit <http://www.gnu.org/licenses/> for further information.<br >
 ## References
 
 ***Web Semantico*** <br >
-A.Y. 2019/2020 <br >
+A.Y. 2019/2020 <br>
 University of Verona (Italy) <br > <br >
 Repository Authors: <br >
 **Edoardo Pieropan** <br>
