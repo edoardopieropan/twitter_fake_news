@@ -1,7 +1,5 @@
-# todo: alcuni tweet potrebbero non essere più disponibili, visualizzarli con card normale e aggiungere disclaimer
-# todo: se arrivo in una qualsiasi view function con la sessione settata lo rimando al test
-# todo: aggiungere messaggi di errore se vado in una pagina senza permesso
-# todo: polishing estetico
+# todo: finire metodi con nuova modalità
+
 
 # note: cambiato metodo salvataggio lista utenti
 
@@ -12,7 +10,7 @@ from app.scripts.get_tweets import create_tweets_set
 
 from app.forms import TweetsSetDownloadForm, UserForm, TestForm
 from wtforms import RadioField
-from wtforms.validators import DataRequired, InputRequired
+from wtforms.validators import InputRequired
 
 from app.utils import load_csv, write_csv, append_to_csv, load_json, write_json
 
@@ -24,12 +22,16 @@ import os
 @app.route("/")
 @app.route("/index")
 def index():
-    # returning index.html
+    if "session_id" in session:
+        return redirect(url_for("test_tweets"))
     return render_template("index.html")
 
 
 @app.route("/download_tweets_sets", methods=['GET', 'POST'])
 def download_tweets_sets():
+    if "session_id" in session:
+        return redirect(url_for("test_tweets"))
+
     if os.path.exists(app.config['TWEETS_SETS_FILE']):
         data = load_json(app.config['TWEETS_SETS_FILE'])
     else:
@@ -52,6 +54,9 @@ def download_tweets_sets():
 
 @app.route('/start_test', methods=['GET', 'POST'])
 def start_test():
+    if "session_id" in session:
+        return redirect(url_for("test_tweets"))
+
     if os.path.exists(app.config['SESSIONS_FILE']):
         data = load_json(app.config['SESSIONS_FILE'])
     else:
@@ -61,7 +66,6 @@ def start_test():
     if os.path.exists(app.config['TWEETS_SETS_FILE']):
         tweets_sets = load_json(app.config['TWEETS_SETS_FILE'])
     else:
-        # TODO: add error message, create at least one tweets set
         return redirect(url_for("download_tweets_sets"))
 
     tweets_sets = [(ts['id'], ts['id']) for ts in tweets_sets]
