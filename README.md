@@ -1,4 +1,6 @@
-# Twitter Fake News - Fact Checking
+# Twitter Fake News - Fact Checking 
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html) [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
+
 ### __University project - Semantic Web__
 Development of a web application based on Python and Flask for automatic *fact-checking* between tweets from Italy and two famous italian news debunkers.
 
