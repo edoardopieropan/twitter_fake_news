@@ -33,7 +33,7 @@ def create_tweets_set(new_set_id, search_keyword, num_tweets):
     tweets = []
 
     list_tweets = get_tweets(search_keyword, num_tweets)
-    bufale = get_bufale(2)
+    bufale = get_bufale(1)
 
     print("started fact checking")
     for i, tweet in enumerate(list_tweets):
