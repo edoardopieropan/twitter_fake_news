@@ -27,8 +27,8 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/download_tweets_sets", methods=['GET', 'POST'])
-def download_tweets_sets():
+@app.route("/download_tweet_sets", methods=['GET', 'POST'])
+def download_tweet_sets():
     if "session_id" in session:
         return redirect(url_for("test_tweets"))
 
@@ -43,13 +43,14 @@ def download_tweets_sets():
         new_set = {"id": new_set_id,
                    "set_name": form.set_name.data,
                    "search_query": form.search_query.data,
-                   "tweets_number": int(form.tweets_number.data)}
-        create_tweets_set(new_set_id, form.search_query.data, int(form.tweets_number.data))
+                   "tweets_number": int(form.tweets_number.data),
+                   "bufale_pages": int(form.bufale_pages.data)}
+        create_tweets_set(new_set_id, form.search_query.data, int(form.tweets_number.data), int(form.bufale_pages.data))
         data.append(new_set)
         write_json(app.config['TWEETS_SETS_FILE'], data)
-        return redirect(url_for("download_tweets_sets"))
+        return redirect(url_for("download_tweet_sets"))
 
-    return render_template("tweets_set_download.html", form=form, tweets_sets=data)
+    return render_template("tweets_set_download.html", form=form, tweets_sets=data[::-1])
 
 
 @app.route('/start_test', methods=['GET', 'POST'])
@@ -66,20 +67,24 @@ def start_test():
     if os.path.exists(app.config['TWEETS_SETS_FILE']):
         tweets_sets = load_json(app.config['TWEETS_SETS_FILE'])
     else:
-        return redirect(url_for("download_tweets_sets"))
+        return redirect(url_for("download_tweet_sets"))
 
-    tweets_sets = [(ts['id'], ts['id']) for ts in tweets_sets]
+    tweets_sets = [(ts['id'], ts['id'] + " (" + ts["search_query"] + ")") for ts in tweets_sets[::-1]]
     form = UserForm()
     form.tweets_set_to_use.choices = tweets_sets
     if form.validate_on_submit():
         new_session_id = form.username.data.replace(" ", "_") + "_" + str(int(datetime.timestamp(datetime.now())))
         new_session = {"id": new_session_id,
-                       "username": form.username.data}
+                       "username": form.username.data,
+                       "age": form.age.data,
+                       "gender": form.gender.data}
         data.append(new_session)
         write_json(app.config['SESSIONS_FILE'], data)
 
         session["session_id"] = new_session_id
         session["username"] = form.username.data
+        session["age"] = form.age.data
+        session["gender"] = form.gender.data
         session["tweets_set_id"] = form.tweets_set_to_use.data
         session["start_timestamp"] = int(datetime.timestamp(datetime.now()))
 
@@ -112,6 +117,8 @@ def test_tweets():
 
         user_session = {"id": session["session_id"],
                         "username": session["username"],
+                        "age": session["age"],
+                        "gender": session["gender"],
                         "tweets_set_id": session["tweets_set_id"],
                         "start_timestamp": session["start_timestamp"],
                         "finish_timestamp": int(datetime.timestamp(datetime.now())),
@@ -131,6 +138,8 @@ def results():
 
     session.pop("session_id")
     session.pop("username")
+    session.pop("age")
+    session.pop("gender")
     session.pop("tweets_set_id")
     session.pop("start_timestamp")
 

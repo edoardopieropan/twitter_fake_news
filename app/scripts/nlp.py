@@ -90,15 +90,29 @@ def get_similarity(doc1, doc2, method, nlp):
     #     print(f"word {i} - {w}")
 
     if method == 5:
-        tfidf_vector = TfidfVectorizer(use_idf=True)
-        tfidf_matrix_doc2 = tfidf_vector.fit_transform([" ".join(doc2_tokens)])
-        df = pd.DataFrame(tfidf_matrix_doc2[0].T.todense(), index=tfidf_vector.get_feature_names(), columns=["TF-IDF"])
-        df = df.sort_values('TF-IDF', ascending=False)
-        thirty_percent = int(len(doc2_tokens) * 30 / 100)
-        doc2_tokens = df.head(thirty_percent).index.tolist()
-
-    if method == 6:
         doc2_tokens = doc2_tokens[:len(doc1_tokens)]
+
+    doc1 = nlp(" ".join(doc1_tokens))
+    doc2 = nlp(" ".join(doc2_tokens))
+
+    result = doc1.similarity(doc2)
+    return result
+
+
+def get_similarity_corpus(tweet, buf_body, nlp, corpus):
+    doc1, doc2 = preprocess(tweet, buf_body)
+
+    doc1_tokens = spacy_tokenizer(doc1, 6, nlp)
+    doc2_tokens = spacy_tokenizer(doc2, 6, nlp)
+
+    tfidf_vector = TfidfVectorizer(use_idf=True)
+    # tfidf_matrix_doc2 = tfidf_vector.fit_transform([" ".join(doc2_tokens)])
+    tfidf_vector.fit(corpus)
+    tfidf_matrix_doc2 = tfidf_vector.transform([" ".join(doc2_tokens)])
+    df = pd.DataFrame(tfidf_matrix_doc2[0].T.todense(), index=tfidf_vector.get_feature_names(), columns=["TF-IDF"])
+    df = df.sort_values('TF-IDF', ascending=False)
+    thirty_percent = int(len(doc2_tokens) * 30 / 100)
+    doc2_tokens = df.head(thirty_percent).index.tolist()
 
     doc1 = nlp(" ".join(doc1_tokens))
     doc2 = nlp(" ".join(doc2_tokens))
@@ -109,43 +123,47 @@ def get_similarity(doc1, doc2, method, nlp):
 
 def get_fact_checking(tweet_text, bufale):
     nlp = spacy.load('it_core_news_lg')
-    # exp1: stop-words and punctuation removal + lemmatization. The tweet is compared with the article's **title**.
-    # exp2: stop-words and punctuation removal + lemmatization. The tweet is compared with the article's **body**.
-    # exp3: keep only nouns. The tweet is compared with the article's **title**.
-    # exp4: keep only nouns. The tweet is compared with the article's **body**.
-    # exp5: stop-words and punctuation removal + lemmatization. If len(tweet) = n, the tweet is compared with the
+    # test1: stop-words and punctuation removal + lemmatization. The tweet is compared with the article's **title**.
+    # test2: stop-words and punctuation removal + lemmatization. The tweet is compared with the article's **body**.
+    # test3: keep only nouns. The tweet is compared with the article's **title**.
+    # test4: keep only nouns. The tweet is compared with the article's **body**.
+    # test5: stop-words and punctuation removal + lemmatization. If len(tweet) = n, the tweet is compared with the
     # first n words in the article's **body**.
-    # exp6: stop-words and punctuation removal + lemmatization. The tweet is compared with the 30% of the words from
+    # test6: stop-words and punctuation removal + lemmatization. The tweet is compared with the 30% of the words from
     # the article's **body** with the greatest TF-IDF index.
 
-    experiments = 6
+    tests = 6
     fact_checking = {}
+    corpus = []
+
+    for b in bufale:
+        corpus.append(b["body"])
 
     for i, b in enumerate(bufale):
         start = time.time()
-        exp = []
-        # exp1
-        exp.append(round(get_similarity(tweet_text, b["title"], 1, nlp), 2))
-        # exp2
-        exp.append(round(get_similarity(tweet_text, b["body"], 2, nlp), 2))
-        # exp3
-        exp.append(round(get_similarity(tweet_text, b["title"], 3, nlp), 2))
-        # exp4
-        exp.append(round(get_similarity(tweet_text, b["body"], 4, nlp), 2))
-        # exp5
-        exp.append(round(get_similarity(tweet_text, b["body"], 5, nlp), 2))
-        # exp6
-        exp.append(round(get_similarity(tweet_text, b["body"], 6, nlp), 2))
+        test_results = []
+        # test1
+        test_results.append(round(get_similarity(tweet_text, b["title"], 1, nlp), 2))
+        # test2
+        test_results.append(round(get_similarity(tweet_text, b["body"], 2, nlp), 2))
+        # test3
+        test_results.append(round(get_similarity(tweet_text, b["title"], 3, nlp), 2))
+        # test4
+        test_results.append(round(get_similarity(tweet_text, b["body"], 4, nlp), 2))
+        # test5
+        test_results.append(round(get_similarity(tweet_text, b["body"], 5, nlp), 2))
+        # test6
+        test_results.append(round(get_similarity_corpus(tweet_text, b["body"], nlp, corpus), 2))
 
-        for e in range(experiments):
+        for e in range(tests):
             if i == 0:
-                fact_checking[f"exp{e+1}"] = {
-                    "similarity": exp[e],
+                fact_checking[f"test{e+1}"] = {
+                    "similarity": test_results[e],
                     "fn_url": b["url"]
                 }
-            elif exp[e] > fact_checking[f"exp{e+1}"]["similarity"]:
+            elif test_results[e] > fact_checking[f"test{e+1}"]["similarity"]:
                 fact_checking[f"exp{e + 1}"] = {
-                    "similarity": exp[e],
+                    "similarity": test_results[e],
                     "fn_url": b["url"]
                 }
 

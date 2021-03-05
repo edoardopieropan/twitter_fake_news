@@ -28,12 +28,12 @@ def get_tweets(search_query, n):
     return [[tweet.user.screen_name, tweet.full_text, tweet.created_at, tweet.id] for tweet in tweets]
 
 
-def create_tweets_set(new_set_id, search_keyword, num_tweets):
+def create_tweets_set(new_set_id, search_keyword, num_tweets, pages):
     # list of tweets
     tweets = []
 
     list_tweets = get_tweets(search_keyword, num_tweets)
-    bufale = get_bufale(1)
+    bufale = get_bufale(pages)
 
     print("started fact checking")
     for i, tweet in enumerate(list_tweets):

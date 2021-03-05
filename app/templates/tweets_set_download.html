@@ -1,6 +1,6 @@
 {% extends 'bootstrap/base.html' %}
 {% import 'bootstrap/wtf.html' as wtf %}
-{% set active_page = "download_tweets_sets" %}
+{% set active_page = "download_tweet_sets" %}
 
 {% block head %}
     {% include "head.html" %}
@@ -19,7 +19,7 @@
 
     {% include "nav.html" %}
 
-    <div class="container-fluid" style="padding: 10em 8em">
+    <div class="container-fluid" style="padding: 8em 8em">
         <div class="row main-cont justify-content-md-center">
                 <div class="col-md-4">
                     <div class="card" id="form_card" style="box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15), 0 3px 10px 0 rgba(0, 0, 0, 0.15); border: none; border-radius: .75rem">
@@ -32,6 +32,10 @@
                                 {{ wtf.form_field(form.set_name) }}
                                 {{ wtf.form_field(form.search_query) }}
                                 {{ wtf.form_field(form.tweets_number) }}
+                                {{ wtf.form_field(form.bufale_pages) }}
+                                <small class="form-text text-muted">
+                                    Number of fact checking pages to scrape
+                                </small>
                                 <div class="text-right"> <!--You can add col-lg-12 if you want -->
                                     {{ wtf.form_field(form.submit, button_map={'submit':'primary'}) }}
                                 </div>

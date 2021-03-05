@@ -4,17 +4,17 @@
 {#</nav>#}
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between">
-      <a class="navbar-brand mb-0 h1 d-flex align-items-center" href="#" style="padding-left: 10%">Fake News Analyzer</a>
+      <a class="navbar-brand mb-0 h1 d-flex align-items-center" href="#" style="padding-left: 10%; font-size: 30pt">GSFake</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav" style="padding-right: 10%">
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav ml-auto" style="font-size: 16pt">
           <li class="nav-item {% if active_page == "index" %} active {% endif %}">
             <a class="nav-link mb-0" href= "{{ url_for("index") }}">Home</a>
           </li>
-          <li class="nav-item {% if active_page == "download_tweets_sets" %} active {% endif %}">
-            <a class="nav-link" href="{{ url_for("download_tweets_sets") }}">Tweets Set</a>
+          <li class="nav-item {% if active_page == "download_tweet_sets" %} active {% endif %}">
+            <a class="nav-link" href="{{ url_for("download_tweet_sets") }}">Tweet Set</a>
           </li>
           <li class="nav-item {% if active_page == "start_test" %} active {% endif %}">
             <a class="nav-link" href="{{ url_for("start_test") }}">Start Test</a>

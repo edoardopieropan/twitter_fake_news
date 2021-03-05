@@ -88,12 +88,12 @@ Note that the set id is the concatenation of the name and the creation timestamp
 The code will now compare all the founded tweets with articles from two fact-checking italian websites. 
 The similarity methods are the following:
 
-1. exp1: stop-words and punctuation removal + lemmatization. The tweet is compared with the article's **title**.
-1. exp2: stop-words and punctuation removal + lemmatization. The tweet is compared with the article's **body**.
-1. exp3: keep only nouns. The tweet is compared with the article's **title**.
-1. exp4: keep only nouns. The tweet is compared with the article's **body**.
-1. exp5: stop-words and punctuation removal + lemmatization. If len(tweet) = n, the tweet is compared with the first n words in the article's **body**.
-1. exp6: stop-words and punctuation removal + lemmatization. The tweet is compared with the 30% of the words from the article's **body** with the greatest TF-IDF index.
+1. test1: stop-words and punctuation removal + lemmatization. The tweet is compared with the article's **title**.
+1. test2: stop-words and punctuation removal + lemmatization. The tweet is compared with the article's **body**.
+1. test3: keep only nouns. The tweet is compared with the article's **title**.
+1. test4: keep only nouns. The tweet is compared with the article's **body**.
+1. test5: stop-words and punctuation removal + lemmatization. If len(tweet) = n, the tweet is compared with the first n words in the article's **body**.
+1. test6: stop-words and punctuation removal + lemmatization. The tweet is compared with the 30% of the words from the article's **body** with the greatest TF-IDF index.
 
 Finally, the results will be stored in set specific *.json* file, structured like the following:
 ```json
@@ -105,19 +105,19 @@ Finally, the results will be stored in set specific *.json* file, structured lik
         "id": 1359532267572453377,
         "progressive": "t0",
         "fact_checking": {
-            "exp1": {
+            "test1": {
                 "similarity": 0.58,
                 "fn_url": "https://www.bufale.net/link_to_the article"
             },
-            "exp2": {
+            "test2": {
                 "similarity": 0.6,
                 "fn_url": "https://www.bufale.net/link_to_the article"
             },
-            "exp3": {
+            "test3": {
                 "similarity": 0.39,
                 "fn_url": "https://www.bufale.net/link_to_the article"
             },
-            "exp4": {
+            "test4": {
                 "similarity": 0.57,
                 "fn_url": "https://www.bufale.net/link_to_the article"
             }
@@ -125,7 +125,7 @@ Finally, the results will be stored in set specific *.json* file, structured lik
     }
 ]
 ```
-Each tweet in the *.json* contains information about the source, the text, the similarity obtained from the methods and for every experiment the url for the article with the higher similarity.
+Each tweet in the *.json* contains information about the source, the text, the similarity obtained from the methods and for every test the url for the article with the higher similarity.
 
 ### > Test page
 The subject is requested to choose a username and a **tweet set**, from those previously downloaded.
