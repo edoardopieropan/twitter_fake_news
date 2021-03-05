@@ -1,4 +1,4 @@
-﻿blis==0.7.4
+blis==0.7.4
 catalogue==1.0.0
 certifi==2020.12.5
 chardet==4.0.0
@@ -16,6 +16,7 @@ MarkupSafe==1.1.1
 murmurhash==1.0.5
 numpy==1.19.5
 oauthlib==3.1.0
+pandas==1.2.3
 plac==1.1.3
 preshed==3.0.5
 PySocks==1.7.1
@@ -23,6 +24,7 @@ python-dotenv==0.15.0
 requests==2.25.1
 requests-oauthlib==1.3.0
 six==1.15.0
+sklearn==0.0
 spacy==2.3.5
 srsly==1.0.5
 thinc==7.4.5
