@@ -7,6 +7,11 @@ import string
 from spacy.lang.it import Italian
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
+#import spellcheck
+import enchant
+import language_tool_python
+
+
 
 
 punctuations = string.punctuation + "’" + "“" + "”"
@@ -132,7 +137,7 @@ def get_fact_checking(tweet_text, bufale):
     # test6: stop-words and punctuation removal + lemmatization. The tweet is compared with the 30% of the words from
     # the article's **body** with the greatest TF-IDF index.
 
-    tests = 6
+    tests = 7
     fact_checking = {}
     corpus = []
 
@@ -154,19 +159,56 @@ def get_fact_checking(tweet_text, bufale):
         test_results.append(round(get_similarity(tweet_text, b["body"], 5, nlp), 2))
         # test6
         test_results.append(round(get_similarity_corpus(tweet_text, b["body"], nlp, corpus), 2))
+        #restituisce errore,tipo_errore sullo spellcheck
+        test_results.append(spellcheck(tweet_text))
 
         for e in range(tests):
-            if i == 0:
-                fact_checking[f"test{e+1}"] = {
-                    "similarity": test_results[e],
-                    "fn_url": b["url"]
+            if e==6:
+                fact_checking[f"test{e + 1}"] = {
+                    "Spellcheck": test_results[e]
                 }
-            elif test_results[e] > fact_checking[f"test{e+1}"]["similarity"]:
-                fact_checking[f"exp{e + 1}"] = {
-                    "similarity": test_results[e],
-                    "fn_url": b["url"]
-                }
+            else:
+                if i == 0:
+                    fact_checking[f"test{e+1}"] = {
+                        "similarity": test_results[e],
+                        "fn_url": b["url"]
+                    }
+                elif test_results[e] > fact_checking[f"test{e+1}"]["similarity"]:
+                    fact_checking[f"exp{e + 1}"] = {
+                        "similarity": test_results[e],
+                        "fn_url": b["url"]
+                    }
 
         print(f"buf{i} - {time.time() - start}")
 
     return fact_checking
+
+def spellcheck(text):
+    print("SpellCheck")
+    tool = language_tool_python.LanguageToolPublicAPI('it')
+    #text='frase sbaliata    di prova!!! ciao'
+    #per informazioni sui tipi di errore rilevati in italiano
+    #https: // community.languagetool.org / rule / list?lang = it & offset = 0 & max = 10
+    text = demojify(text)
+    matchesita = tool.check(text)
+    d = enchant.Dict("en_US")
+    my_mistakes = []
+    for rules in matchesita:
+        if len(matchesita) >= 0:
+            worderrorit = text[rules.offset:rules.errorLength + rules.offset]
+            if worderrorit[0]!='@' and worderrorit[0]!='#':#togli parole con # o @
+                errorcategory = rules.category
+                #print(errorcategory)
+                #print("ita: -"+worderrorit+"-")
+                if errorcategory=='TYPOS':
+                    if d.check(worderrorit)== False:#controlla se parola non è inglese
+                        my_mistakes.append([text[rules.offset:rules.errorLength + rules.offset], errorcategory])
+                else:
+                    my_mistakes.append([text[rules.offset:rules.errorLength + rules.offset], errorcategory])
+
+    #print(text)
+    #print("errori" + str(len(my_mistakes)))
+    #print(my_mistakes)
+    if len(my_mistakes)>0:
+        return len(my_mistakes), my_mistakes
+    return 0 , "Nessun errore trovato"
