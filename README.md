@@ -35,6 +35,12 @@ pip install -r requirements.txt
 ```
 For language analysis we use [spaCy](https://spacy.io/usage) ([Github](https://github.com/explosion/spaCy)), a free open-source library for advanced Natural Language Processing (NLP) in Python. It supports also the Italian language. Beginners can have a look at https://spacy.io/usage/spacy-101.
 
+If there is a problem installing 'it-core-news-lg==2.3.0', use this command:
+```bash
+python -m spacy download it_core_news_lg
+```
+and reinstall requirements.
+
 To download the spaCy model on your machine you can run those commands on your terminal:
 ```bash
 python -m spacy download it_core_news_lg
